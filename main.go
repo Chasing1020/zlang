@@ -1,12 +1,15 @@
+/*
+Copyright © 2022 zjc <chasing1020@gmail.com>
+Time: 2022/3/10-12:30 PM
+File: main.go
+*/
+
 package main
 
 import (
-	"fmt"
-	"zjclang/util"
+	"zlang/cmd"
 )
 
 func main() {
-	fmt.Println(`Welcome to ZjcLang v0.0.1.`)
-	fmt.Println(`Type ".help" for more information.`)
-	util.Start()
+	cmd.Execute()
 }

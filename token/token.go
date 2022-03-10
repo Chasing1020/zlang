@@ -1,3 +1,9 @@
+/*
+Copyright © 2022 zjc <chasing1020@gmail.com>
+Time: 2022/3/10-1:01 PM
+File: token.go
+*/
+
 package token
 
 import (

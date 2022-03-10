@@ -1,3 +1,9 @@
+/*
+Copyright © 2022 zjc <chasing1020@gmail.com>
+Time: 2022/3/10-5:10 PM
+File: reader.go
+*/
+
 package util
 
 import (
@@ -5,12 +11,11 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"zjclang/scanner"
-	"zjclang/token"
+	"zlang/scanner"
+	"zlang/token"
 )
 
 func Start() {
-
 	ioScanner := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Printf("> ")

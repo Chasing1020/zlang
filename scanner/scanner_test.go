@@ -1,10 +1,16 @@
+/*
+Copyright © 2022 zjc <chasing1020@gmail.com>
+Time: 2022/3/10-1:13 PM
+File: scanner_test.go
+*/
+
 package scanner
 
 import (
 	"fmt"
 	"log"
 	"testing"
-	"zjclang/token"
+	"zlang/token"
 )
 
 func TestScannerNext(t *testing.T) {
