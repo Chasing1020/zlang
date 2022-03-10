@@ -1,9 +1,15 @@
+/*
+Copyright © 2022 zjc <chasing1020@gmail.com>
+Time: 2022/3/10-8:36 PM
+File: scanner.go
+*/
+
 package scanner
 
 import (
 	"io"
 	"unicode/utf8"
-	"zjclang/token"
+	"zlang/token"
 )
 
 type Scanner struct {

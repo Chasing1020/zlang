@@ -1,3 +1,9 @@
+/*
+Copyright © 2022 zjc <chasing1020@gmail.com>
+Time: 2022/3/10-2:36 PM
+File: source.go
+*/
+
 package scanner
 
 import (

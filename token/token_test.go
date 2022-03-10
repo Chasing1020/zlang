@@ -1,3 +1,9 @@
+/*
+Copyright © 2022 zjc <chasing1020@gmail.com>
+Time: 2022/3/10-1:30 PM
+File: scanner_test.go
+*/
+
 package token
 
 import (
@@ -53,6 +59,6 @@ func TestMakeTokenMap(t *testing.T) {
 		35: "Return",
 	}
 	for i := 0; i < 36; i++ {
-		fmt.Printf("\"%s\",",m[uint(i)])
+		fmt.Printf("\"%s\",", m[uint(i)])
 	}
 }
