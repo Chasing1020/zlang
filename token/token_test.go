@@ -13,7 +13,7 @@ import (
 )
 
 func TestToken(t *testing.T) {
-	tok := Token(1)
+	tok := Type(1)
 	v := reflect.ValueOf(tok)
 	ty := reflect.TypeOf(&tok)
 	fmt.Println(v, ty)
