@@ -11,11 +11,11 @@ import (
 	"reflect"
 )
 
-type Token uint
+type Type uint
 
 const (
-	UNKNOWN Token = iota
-	EOF           // EOF
+	UNKNOWN Type = iota
+	EOF          // EOF
 	Ident
 	Int
 	String
@@ -58,14 +58,23 @@ const (
 	Const // const TODO: support const
 )
 
+func (t *Type) String() string {
+	reflect.TypeOf(t)
+	return fmt.Sprintf("%d", t)
+}
+
 var TokenMap = []string{"UNKNOWN", "EOF", "Ident", "Int", "String", "Operator", "Assign",
 	"Plus", "Minus", "Bang", "Star", "Slash", "Eql", "Neq", "Lss", "Leq", "Gtr",
 	"Geq", "Lparen", "Lbrack", "Lbrace", "Rparen", "Rbrack", "Rbrace", "Comma",
 	"Semi", "Colon", "Dot", "DotDotDot", "Function", "True", "False", "If", "Else", "Let", "Return"}
 
-func (t *Token) String() string {
-	reflect.TypeOf(t)
-	return fmt.Sprintf("%d", t)
+type Token struct {
+	Type    Type
+	Literal string
+}
+
+func (t Token) String() string {
+	return fmt.Sprintf("type: %s , literal:%s", TokenMap[t.Type], t.Literal)
 }
 
 type LitKind uint8
@@ -76,7 +85,7 @@ const (
 	Keyword
 )
 
-var KeywordMap = map[string]Token{
+var KeywordMap = map[string]Type{
 	"function": Function,
 	"let":      Let,
 	"true":     True,

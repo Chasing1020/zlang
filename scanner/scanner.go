@@ -14,9 +14,10 @@ import (
 
 type Scanner struct {
 	source
-	Tok     token.Token
-	Literal string
-	kind    token.LitKind
+	//Tok     token.Type
+	//Literal string
+	token.Token
+	kind token.LitKind
 }
 
 func (s *Scanner) Init(buf string, errHandler func(line, col uint, msg string)) {
@@ -33,75 +34,55 @@ func (s *Scanner) Next() {
 	}
 
 	switch s.ch {
-
 	case '=':
 		if s.peekChar() == '=' {
 			ch := s.ch
 			s.Next()
-			s.Literal = string(ch) + string(s.ch)
-			s.Tok = token.Eql
+			s.Token = token.Token{Type: token.Eql, Literal: string(ch) + string(s.ch)}
 		} else {
-			s.Tok = token.Assign
-			s.Literal = string(s.ch)
+			s.Token = token.Token{Type: token.Assign, Literal: string(s.ch)}
 		}
 	case '+':
-		s.Tok = token.Plus
-		s.Literal = string(s.ch)
+		s.Token = token.Token{Type: token.Plus, Literal: string(s.ch)}
 	case '-':
-		s.Tok = token.Minus
-		s.Literal = string(s.ch)
+		s.Token = token.Token{Type:token.Minus, Literal:   string(s.ch)}
 	case '!':
 		if s.peekChar() == '=' {
 			ch := s.ch
 			s.nextCh()
-			s.Tok = token.Neq
-			s.Literal = string(ch) + string(s.ch)
+			s.Token = token.Token{Type: token.Neq, Literal: string(ch)}
 		} else {
-			s.Tok = token.Bang
-			s.Literal = string(s.ch)
+			s.Token = token.Token{Type: token.Bang, Literal: string(s.ch)}
 		}
 	case '/':
-		s.Tok = token.Slash
-		s.Literal = string(s.ch)
+		s.Token = token.Token{Type: token.Slash, Literal: string(s.ch)}
 	case '*':
-		s.Tok = token.Star
-		s.Literal = string(s.ch)
+		s.Token = token.Token{Type: token.Star, Literal: string(s.ch)}
 	case '<':
-		s.Tok = token.Lss
-		s.Literal = string(s.ch)
+		s.Token = token.Token{Type: token.Lss, Literal: string(s.ch)}
 	case '>':
-		s.Tok = token.Gtr
-		s.Literal = string(s.ch)
+		s.Token = token.Token{Type: token.Gtr, Literal: string(s.ch)}
 	case ';':
-		s.Tok = token.Semi
-		s.Literal = string(s.ch)
+		s.Token = token.Token{Type: token.Semi, Literal: string(s.ch)}
 	case ',':
-		s.Tok = token.Comma
-		s.Literal = string(s.ch)
+		s.Token = token.Token{Type: token.Comma, Literal: string(s.ch)}
 	case '{':
-		s.Tok = token.Lbrace
-		s.Literal = string(s.ch)
+		s.Token = token.Token{Type: token.Lbrace, Literal: string(s.ch)}
 	case '}':
-		s.Tok = token.Rbrace
-		s.Literal = string(s.ch)
+		s.Token = token.Token{Type: token.Rbrace, Literal: string(s.ch)}
 	case '(':
-		s.Tok = token.Lparen
-		s.Literal = string(s.ch)
+		s.Token = token.Token{Type: token.Lparen, Literal: string(s.ch)}
 	case ')':
-		s.Tok = token.Rparen
-		s.Literal = string(s.ch)
+		s.Token = token.Token{Type: token.Rparen, Literal: string(s.ch)}
 	case 0:
-		s.Literal = ""
-		s.Tok = token.EOF
+		s.Token = token.Token{Type: token.EOF, Literal: string(s.ch)}
 	default:
 		// if current ch can be an identifier
 		if isLetter(s.ch) && s.readIdentChar(true) {
-			s.Literal = s.ident()
-			s.Tok = checkIdent(s.Literal)
+			s.Token = token.Token{Type: checkIdent(s.Literal), Literal: s.ident()}
 			return
 		} else if isDigit(s.ch) {
-			s.Tok = token.Int
-			s.Literal = s.readNumber()
+			s.Token = token.Token{Type: token.Int, Literal: s.readNumber()}
 			return
 		} else {
 			s.errorf("invalid character %#U in identifier", s.ch)
@@ -169,7 +150,7 @@ func (s *Scanner) readNumber() string {
 }
 
 // checkIdent verify whether an indent is a keyword
-func checkIdent(ident string) token.Token {
+func checkIdent(ident string) token.Type {
 	if keyword, ok := token.KeywordMap[ident]; ok {
 		return keyword
 	}
