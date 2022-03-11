@@ -19,8 +19,9 @@ type Array struct {
 	Elements []ast.Expr
 }
 
-func (a *Array) expressionNode()      {}
-func (a *Array) TokenLiteral() string { return a.Token.Literal }
+
+func (a *Array) IsExpr()      {}
+func (a *Array) Literal() string { return a.Token.Literal }
 func (a *Array) String() string {
 	var elements []string
 	for _, element := range a.Elements {

@@ -13,14 +13,14 @@ import (
 	"zlang/token"
 )
 
-type Hash struct {
+type Map struct {
 	Token token.Token // the '{' token
 	Pairs map[ast.Expr]ast.Expr
 }
 
-func (h *Hash) expressionNode()      {}
-func (h *Hash) TokenLiteral() string { return h.Token.Literal }
-func (h *Hash) String() string {
+func (h *Map) IsExpr()      {}
+func (h *Map) Literal() string { return h.Token.Literal }
+func (h *Map) String() string {
 	var pairs []string
 	for key, value := range h.Pairs {
 		pairs = append(pairs, key.String()+":"+value.String())

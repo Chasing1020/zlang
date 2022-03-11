@@ -36,13 +36,13 @@ type Node interface {
 
 type Expr interface {
 	Node
-	// IsExpr() is used to implement the stat interface.
+	// IsExpr is used to implement the stat interface.
 	IsExpr()
 }
 
 type Stat interface {
 	Node
-	// IsStat() is used to implement the stat interface.
+	// IsStat is used to implement the stat interface.
 	IsStat()
 }
 

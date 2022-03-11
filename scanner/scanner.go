@@ -80,7 +80,8 @@ func (s *Scanner) NextTok() {
 	default:
 		// if current ch can be an identifier
 		if isLetter(s.ch) && s.readIdentChar(true) {
-			s.Token = token.Token{Type: checkIdent(s.Literal), Literal: s.ident()}
+			literal := s.ident()
+			s.Token = token.Token{Type: checkIdent(literal), Literal: literal}
 			return
 		} else if isDigit(s.ch) {
 			s.Token = token.Token{Type: token.Int, Literal: s.readNumber()}

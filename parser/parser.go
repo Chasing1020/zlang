@@ -7,9 +7,9 @@ File: parser.go
 package parser
 
 import (
+	"fmt"
 	"log"
 	"zlang/ast"
-	"zlang/ast/statement"
 	"zlang/scanner"
 	"zlang/token"
 )
@@ -49,7 +49,7 @@ var PrecedenceMap = map[token.Type]Precedence{
 
 type Parser struct {
 	scanner.Scanner
-	err []error
+	errs []error
 
 	curTok  token.Token
 	peekTok token.Token
@@ -71,21 +71,21 @@ func (p *Parser) init(buf string) {
 		log.Println("compiler error:", "msg:", msg, "line:", line, "col:", col)
 	})
 	p.prefixParseFns = make(map[token.Type]prefixParseFn)
-	// registerPrefix
+	//registerPrefix
 	p.registerPrefix(token.Ident, p.parseIdentifier)
-	p.registerPrefix(token.Int, p.parseIntegerLiteral)
-	p.registerPrefix(token.String, p.parseStringLiteral)
+	p.registerPrefix(token.Int, p.parseInteger)
+	p.registerPrefix(token.String, p.parseString)
 	p.registerPrefix(token.Bang, p.parsePrefixExpression)
 	p.registerPrefix(token.Minus, p.parsePrefixExpression)
 	p.registerPrefix(token.True, p.parseBoolean)
 	p.registerPrefix(token.False, p.parseBoolean)
 	p.registerPrefix(token.Lparen, p.parseGroupedExpression)
 	p.registerPrefix(token.If, p.parseIfExpression)
-	p.registerPrefix(token.Function, p.parseFunctionLiteral)
-	p.registerPrefix(token.Lbrack, p.parseArrayLiteral)
-	p.registerPrefix(token.Lbrace, p.parseHashLiteral)
+	p.registerPrefix(token.Function, p.parseFunction)
+	p.registerPrefix(token.Lbrack, p.parseArray)
+	p.registerPrefix(token.Lbrace, p.parseMapLiteral)
 
-	p.infixParseFns = make(map[token.TokenType]infixParseFn)
+	p.infixParseFns = make(map[token.Type]infixParseFn)
 	p.registerInfix(token.Plus, p.parseInfixExpression)
 	p.registerInfix(token.Minus, p.parseInfixExpression)
 	p.registerInfix(token.Slash, p.parseInfixExpression)
@@ -129,43 +129,15 @@ func (p *Parser) parseStatement() ast.Stat {
 	}
 }
 
-func (p *Parser) parseExpressionStatement() *statement.Expression {
-	stmt := &statement.Expression{Token: p.curTok}
-
-	stmt.Expression = p.parseExpression(LOWEST)
-
-	// if == ;
-	if p.peekTokenIs(token.Semi) {
-		p.nextToken()
-	}
-
-	return stmt
-}
-
-func (p *Parser) parseExpression(precedence Precedence) ast.Expr {
-	prefix := p.prefixParseFns[p.curTok.Type]
-	if prefix == nil {
-		p.noPrefixParseFnError(p.curTok.Type)
-		return nil
-	}
-	leftExp := prefix()
-
-	for !p.peekTokenIs(token.Semi) && precedence < p.peekPrecedence() {
-		infix := p.infixParseFns[p.peekTok.Type]
-		if infix == nil {
-			return leftExp
-		}
-
-		p.nextToken()
-
-		leftExp = infix(leftExp)
-	}
-
-	return leftExp
-}
-
 func (p *Parser) peekPrecedence() Precedence {
 	if precedence, ok := PrecedenceMap[p.peekTok.Type]; ok {
+		return precedence
+	}
+	return LOWEST
+}
+
+func (p *Parser) curPrecedence() Precedence {
+	if precedence, ok := PrecedenceMap[p.curTok.Type]; ok {
 		return precedence
 	}
 	return LOWEST
@@ -174,6 +146,7 @@ func (p *Parser) peekPrecedence() Precedence {
 func (p *Parser) nextToken() {
 	p.curTok = p.peekTok
 	p.NextTok()
+	p.peekTok = p.Scanner.Token
 }
 
 func (p *Parser) curTokenIs(t token.Type) bool {
@@ -189,13 +162,8 @@ func (p *Parser) expectPeek(t token.Type) bool {
 		p.nextToken()
 		return true
 	} else {
-		p.peekError(t)
+		p.errs = append(p.errs, fmt.Errorf("expected next token to be %s, got %s instead",
+			token.TokenMap[t], p.peekTok.Type.String()))
 		return false
 	}
 }
-
-//func (p *Parser) Errors() []string {
-//	return p.errors
-//}
-//
-//

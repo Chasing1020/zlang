@@ -24,11 +24,14 @@ type Function struct {
 // IsExpr represents Function is an expression
 // Aim to avoid the import cycle problem.
 func (f *Function) IsExpr()         {}
+
+// func (f *Function) IsStat()         {}
+
 func (f *Function) Literal() string { return f.Token.Literal }
 func (f *Function) String() string {
 	var params []string
 	for _, p := range f.Parameters {
 		params = append(params, p.String())
 	}
-	return fmt.Sprintf("(%s) %s", strings.Join(params, ", "), f.Body.String())
+	return fmt.Sprintf("function(%s) %s", strings.Join(params, ", "), f.Body.String())
 }
