@@ -25,7 +25,7 @@ func TestScannerNext(t *testing.T) {
 		s.Init(test, func(line, col uint, msg string) {
 			log.Println("line:", line, "col:", col, "msg:", msg)
 		})
-		for s.Next(); s.Type != token.EOF; s.Next() {
+		for s.NextTok(); s.Type != token.EOF; s.NextTok() {
 			fmt.Println("token:", token.TokenMap[s.Type], ", literal:", s.Literal)
 		}
 	}

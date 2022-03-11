@@ -28,8 +28,8 @@ func Start() {
 		s.Init(ioScanner.Text(), func(line, col uint, msg string) {
 			log.Println("line:", line, "col:", col, "msg:", msg)
 		})
-		for s.Next(); s.Tok != token.EOF; s.Next() {
-			fmt.Println("token:", token.TokenMap[s.Tok], ", literal:", s.Literal)
+		for s.NextTok(); s.Type != token.EOF; s.NextTok() {
+			fmt.Println("token:", token.TokenMap[s.Type], ", literal:", s.Literal)
 		}
 	}
 }
