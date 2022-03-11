@@ -26,7 +26,8 @@ func (s *Scanner) Init(buf string, errHandler func(line, col uint, msg string)) 
 	s.nextCh()
 }
 
-func (s *Scanner) Next() {
+// NextTok Get the NextTok token
+func (s *Scanner) NextTok() {
 
 	// skip blank
 	for s.ch == ' ' || s.ch == '\t' || s.ch == '\n' || s.ch == '\r' {
@@ -37,7 +38,7 @@ func (s *Scanner) Next() {
 	case '=':
 		if s.peekChar() == '=' {
 			ch := s.ch
-			s.Next()
+			s.NextTok()
 			s.Token = token.Token{Type: token.Eql, Literal: string(ch) + string(s.ch)}
 		} else {
 			s.Token = token.Token{Type: token.Assign, Literal: string(s.ch)}

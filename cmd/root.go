@@ -16,7 +16,7 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "zlang <options> [script.zjc] [arguments]",
-	Short: "This is my tiny language called zlang",
+	Short: "This is my tiny language called zlang.\n It is like Server-side JavaScript platform (Node.js).",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
@@ -39,7 +39,9 @@ func Execute() {
 func init() {
 	rootCmd.SuggestionsMinimumDistance = 1
 	rootCmd.SetHelpTemplate(`
-zlang is a tool for build zlang source code.
+This is my simple language interpreter called zlang.
+It supports lots of features in JavaScript, which
+likes a Server-side JavaScript platform (Node.js).
 
 Usage:
 	zlang <options> [script.zjc] [arguments]
