@@ -21,12 +21,23 @@ func TestScannerNext(t *testing.T) {
 		"1a",
 	}
 	for _, test := range tests {
-		s := Scanner{}
-		s.Init(test, func(line, col uint, msg string) {
-			log.Println("line:", line, "col:", col, "msg:", msg)
-		})
-		for s.NextTok(); s.Type != token.EOF; s.NextTok() {
-			fmt.Println("token:", token.TokenMap[s.Type], ", literal:", s.Literal)
-		}
+		quickScan(test)
 	}
+}
+
+func TestLet(t *testing.T) {
+	input := "function(a) { return 1}; "
+	quickScan(input)
+}
+
+func quickScan(input string) {
+	s := Scanner{}
+	s.Init(input, func(line, col uint, msg string) {
+		log.Println("line:", line, "col:", col, "msg:", msg)
+	})
+	fmt.Println(input)
+	for s.NextTok(); s.Type != token.EOF; s.NextTok() {
+		fmt.Println("token:", token.TokenMap[s.Type], ", literal:", s.Literal)
+	}
+	fmt.Println("-----------------")
 }
