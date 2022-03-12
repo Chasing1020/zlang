@@ -20,8 +20,10 @@ type Block struct {
 func (bs *Block) IsStat()         {}
 func (bs *Block) Literal() string { return bs.Token.Literal }
 func (bs *Block) String() (s string) {
+	s += "{\n"
 	for _, statement := range bs.Statements {
-		s += statement.String()
+		s += "\t" + statement.String() + "\n"
 	}
+	s = s[:len(s)-3] + "}"
 	return
 }

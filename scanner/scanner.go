@@ -28,6 +28,11 @@ func (s *Scanner) Init(buf string, errHandler func(line, col uint, msg string)) 
 
 // NextTok Get the NextTok token
 func (s *Scanner) NextTok() {
+	defer func() {
+		if s.err != nil && s.err != io.EOF {
+			panic(s.err)
+		}
+	}()
 
 	// skip blank
 	for s.ch == ' ' || s.ch == '\t' || s.ch == '\n' || s.ch == '\r' {
@@ -46,7 +51,7 @@ func (s *Scanner) NextTok() {
 	case '+':
 		s.Token = token.Token{Type: token.Plus, Literal: string(s.ch)}
 	case '-':
-		s.Token = token.Token{Type:token.Minus, Literal:   string(s.ch)}
+		s.Token = token.Token{Type: token.Minus, Literal: string(s.ch)}
 	case '!':
 		if s.peekChar() == '=' {
 			ch := s.ch
@@ -75,6 +80,14 @@ func (s *Scanner) NextTok() {
 		s.Token = token.Token{Type: token.Lparen, Literal: string(s.ch)}
 	case ')':
 		s.Token = token.Token{Type: token.Rparen, Literal: string(s.ch)}
+	case '[':
+		s.Token = token.Token{Type: token.Lbrack, Literal: string(s.ch)}
+	case ']':
+		s.Token = token.Token{Type: token.Rbrack, Literal: string(s.ch)}
+	case ':':
+		s.Token = token.Token{Type: token.Colon, Literal: string(s.ch)}
+	case '"':
+		s.Token = token.Token{Type: token.String, Literal: s.readString()}
 	case 0:
 		s.Token = token.Token{Type: token.EOF, Literal: string(s.ch)}
 	default:
@@ -126,6 +139,17 @@ func (s *Scanner) readIdentChar(isFirst bool) bool {
 		return false
 	}
 	return true
+}
+
+func (s *Scanner) readString() (res string) {
+	s.nextCh()
+	index := s.index
+	for s.ch != '"' && s.err != io.EOF {
+		s.nextCh()
+	}
+	res = s.buf[index:s.index]
+	//s.nextCh()
+	return
 }
 
 func (s *Scanner) ident() string {
