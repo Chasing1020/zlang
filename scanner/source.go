@@ -7,6 +7,7 @@ File: source.go
 package scanner
 
 import (
+	"errors"
 	"fmt"
 	"unicode/utf8"
 )
@@ -14,7 +15,7 @@ import (
 const (
 	baseLine   = 1
 	baseColumn = 1
-	sentinel = utf8.RuneSelf
+	sentinel   = utf8.RuneSelf
 )
 
 // source represents a source of an input buffer
@@ -42,6 +43,7 @@ func (s *source) pos() (line, col uint) {
 // error reports the error msg at source position s.pos().
 func (s *source) error(msg string) {
 	line, col := s.pos()
+	s.err = errors.New(msg)
 	s.errHandler(line, col, msg)
 }
 
@@ -61,7 +63,6 @@ func (s *source) errorf(format string, args ...interface{}) {
 //	s.index++
 //}
 
-
 func (s *source) nextCh() {
 	if s.next >= len(s.buf) {
 		s.ch = 0
@@ -78,6 +79,7 @@ func (s *source) nextCh() {
 	s.index = s.next
 	s.next++
 }
+
 //func error (line, col uint, msg string) {
 //	if msg[0] != '/' {
 //		// error

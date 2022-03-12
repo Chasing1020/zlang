@@ -50,5 +50,6 @@ The commands are:
 	run         start run zlang program
 	version     show version information
 	test        test packages
+	fmt         format source files in the current directory
 `)
 }

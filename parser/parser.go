@@ -21,17 +21,11 @@ const (
 	LOWEST
 	EQUALS       // ==
 	LESS_GREATER // > or <
-
-	SUM     // +
-	PRODUCT // *
-	PREFIX  // -X or !X
-	CALL    // myFunction(X)
-	INDEX   // array[index]
-)
-
-type (
-	prefixParseFn func() ast.Expr
-	infixParseFn  func(ast.Expr) ast.Expr
+	SUM          // +
+	PRODUCT      // *
+	PREFIX       // -X or !X
+	CALL         // myFunction(X)
+	INDEX        // array[index]
 )
 
 var PrecedenceMap = map[token.Type]Precedence{
@@ -53,59 +47,57 @@ type Parser struct {
 
 	curTok  token.Token
 	peekTok token.Token
-
-	prefixParseFns map[token.Type]prefixParseFn
-	infixParseFns  map[token.Type]infixParseFn
-}
-
-func (p *Parser) registerPrefix(tokenType token.Type, fn prefixParseFn) {
-	p.prefixParseFns[tokenType] = fn
-}
-
-func (p *Parser) registerInfix(tokenType token.Type, fn infixParseFn) {
-	p.infixParseFns[tokenType] = fn
-}
+} // Read two tokens, so curToken and peekToken are both set
 
 func (p *Parser) init(buf string) {
 	p.Scanner.Init(buf, func(line, col uint, msg string) {
-		log.Println("compiler error:", "msg:", msg, "line:", line, "col:", col)
+		log.Println("compiler error:", msg, "line:", line, "col:", col)
 	})
-	p.prefixParseFns = make(map[token.Type]prefixParseFn)
-	//registerPrefix
-	p.registerPrefix(token.Ident, p.parseIdentifier)
-	p.registerPrefix(token.Int, p.parseInteger)
-	p.registerPrefix(token.String, p.parseString)
-	p.registerPrefix(token.Bang, p.parsePrefixExpression)
-	p.registerPrefix(token.Minus, p.parsePrefixExpression)
-	p.registerPrefix(token.True, p.parseBoolean)
-	p.registerPrefix(token.False, p.parseBoolean)
-	p.registerPrefix(token.Lparen, p.parseGroupedExpression)
-	p.registerPrefix(token.If, p.parseIfExpression)
-	p.registerPrefix(token.Function, p.parseFunction)
-	p.registerPrefix(token.Lbrack, p.parseArray)
-	p.registerPrefix(token.Lbrace, p.parseMapLiteral)
-
-	p.infixParseFns = make(map[token.Type]infixParseFn)
-	p.registerInfix(token.Plus, p.parseInfixExpression)
-	p.registerInfix(token.Minus, p.parseInfixExpression)
-	p.registerInfix(token.Slash, p.parseInfixExpression)
-	p.registerInfix(token.Star, p.parseInfixExpression)
-	p.registerInfix(token.Eql, p.parseInfixExpression)
-	p.registerInfix(token.Neq, p.parseInfixExpression)
-	p.registerInfix(token.Lss, p.parseInfixExpression)
-	p.registerInfix(token.Gtr, p.parseInfixExpression)
-
-	p.registerInfix(token.Lparen, p.parseCallExpression)
-	p.registerInfix(token.Lbrack, p.parseIndexExpression)
-
-	// Read two tokens, so curToken and peekToken are both set
 	p.nextToken()
 	p.nextToken()
+}
+
+func (p *Parser) getPrefixParseFunc() func() ast.Expr {
+	switch p.curTok.Type {
+	case token.Ident:
+		return p.parseIdentifier
+	case token.Int:
+		return p.parseInteger
+	case token.String:
+		return p.parseString
+	case token.Bang, token.Minus:
+		return p.parsePrefixExpression
+	case token.True, token.False:
+		return p.parseBoolean
+	case token.Lparen:
+		return p.parseGroupedExpression
+	case token.If:
+		return p.parseIfExpression
+	case token.Function:
+		return p.parseFunction
+	case token.Lbrack:
+		return p.parseArray
+	case token.Lbrace:
+		return p.parseMapLiteral
+	}
+	return nil
+}
+
+func (p *Parser) getInfixParseFunc() func(expr ast.Expr) ast.Expr {
+	switch p.peekTok.Type {
+	case token.Plus, token.Minus, token.Star, token.Slash, // +, -, *, /
+		token.Eql, token.Neq, token.Lss, token.Gtr: // ==, != , <, >
+		return p.parseInfixExpression
+	case token.Lparen:
+		return p.parseCallExpression
+	case token.Lbrack:
+		return p.parseIndexExpression
+	}
+	return nil
 }
 
 func (p *Parser) ParseFile() *ast.File {
 	file := &ast.File{}
-	file.Stats = []ast.Stat{}
 
 	for !p.curTokenIs(token.EOF) {
 		stat := p.parseStatement()
@@ -114,7 +106,6 @@ func (p *Parser) ParseFile() *ast.File {
 		}
 		p.nextToken()
 	}
-
 	return file
 }
 

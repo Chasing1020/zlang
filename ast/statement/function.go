@@ -23,7 +23,7 @@ type Function struct {
 
 // IsExpr represents Function is an expression
 // Aim to avoid the import cycle problem.
-func (f *Function) IsExpr()         {}
+func (f *Function) IsExpr() {}
 
 // func (f *Function) IsStat()         {}
 

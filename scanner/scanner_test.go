@@ -30,6 +30,17 @@ func TestLet(t *testing.T) {
 	quickScan(input)
 }
 
+func TestString(t *testing.T) {
+	input := `"zjc"`
+	quickScan(input)
+}
+
+func TestAssign(t *testing.T) {
+	//input := `a = 1 + 1`
+	input := `a = (1+2)*3+4*5`
+	quickScan(input)
+}
+
 func quickScan(input string) {
 	s := Scanner{}
 	s.Init(input, func(line, col uint, msg string) {

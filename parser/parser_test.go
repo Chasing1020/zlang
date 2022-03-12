@@ -19,10 +19,30 @@ func TestParser(t *testing.T) {
 		errs:           nil,
 		curTok:         token.Token{},
 		peekTok:        token.Token{},
-		prefixParseFns: nil,
-		infixParseFns:  nil,
 	}
-	p.init("function(a, b) {return a + b;}")
+	p.init("function(a, b) { let zjc = 1+1; return a + b;}")
 	file := p.ParseFile()
+	fmt.Println(file.Stats)
+}
+
+func TestQuickParser(t *testing.T) {
+	inputs := []string{
+		"if (true) { let zjc = 1+1; return a + b;}",
+		"(1+2)",
+		"let a = function(a, b) { return a + b; }",
+		"[1, \"a\", 2];",
+		`{a:1, b:2}`,
+		`(1+2)*1+4*2+1*(2*2+1)`,
+	}
+	for _, input := range inputs {
+		quickParser(input)
+	}
+}
+
+func quickParser(buf string) {
+	p := Parser{}
+	p.init(buf)
+	file := p.ParseFile()
+	fmt.Println("----------------")
 	fmt.Println(file.Stats)
 }

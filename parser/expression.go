@@ -22,24 +22,25 @@ import (
 //             | Literal                                // Infix expression
 //             | Function '{' Statement '}'             // Prefix Expression
 func (p *Parser) parseExpression(precedence Precedence) ast.Expr {
-	prefix := p.prefixParseFns[p.curTok.Type]
-	if prefix == nil {
+	prefixFunc := p.getPrefixParseFunc()
+	//prefixFunc := p.prefixParseFns[p.curTok.Type]
+	if prefixFunc == nil {
 		p.errs = append(p.errs, errors.New(p.curTok.Type.String()))
 		return nil
 	}
-	leftExp := prefix()
+	leftExp := prefixFunc()
 
 	for !p.peekTokenIs(token.Semi) && precedence < p.peekPrecedence() {
-		infix := p.infixParseFns[p.peekTok.Type]
-		if infix == nil {
+		//infixFunc := p.infixParseFns[p.curTok.Type]
+		infixFunc := p.getInfixParseFunc()
+		if infixFunc == nil {
 			return leftExp
 		}
 
 		p.nextToken()
 
-		leftExp = infix(leftExp)
+		leftExp = infixFunc(leftExp)
 	}
-
 	return leftExp
 }
 

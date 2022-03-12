@@ -17,11 +17,11 @@ type Expression struct {
 	Expression ast.Expr
 }
 
-func (es *Expression) IsStat()         {}
-func (es *Expression) Literal() string { return es.Token.Literal }
-func (es *Expression) String() string {
-	if es.Expression != nil {
-		return es.Expression.String()
+func (e *Expression) IsStat()         {}
+func (e *Expression) Literal() string { return e.Token.Literal }
+func (e *Expression) String() string {
+	if e.Expression != nil {
+		return e.Expression.String()
 	}
-	return ""
+	return e.Token.Literal
 }
