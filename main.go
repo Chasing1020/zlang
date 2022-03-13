@@ -7,12 +7,11 @@ File: main.go
 package main
 
 import (
-	"os"
-	"zlang/util"
+	"zlang/cmd"
 )
 
 func main() {
-	util.StartEvaluator(os.Stdin, os.Stdout)
+	//util.StartEvaluator(os.Stdin, os.Stdout)
 	//util.StartTTY()
-	//cmd.Execute()
+	cmd.Execute()
 }

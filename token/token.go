@@ -55,8 +55,8 @@ const (
 	Let    // let
 	Return // return
 
-	For    // For
-	Const // const TODO: support const
+	For    // for
+	Const  // const TODO: support const
 )
 
 func (t *Type) String() string {

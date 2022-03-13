@@ -20,8 +20,8 @@ var rootCmd = &cobra.Command{
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(`Welcome to ZjcLang v0.0.1.`)
-		fmt.Println(`Type ".help" for more information.`)
+		fmt.Println(`Welcome to zLang v0.0.1.`)
+		fmt.Println(`Type "help" for more information.`)
 		util.Start()
 		fmt.Println("root cmd")
 	},

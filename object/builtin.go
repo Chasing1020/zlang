@@ -72,7 +72,7 @@ func (e *Error) String() string { return e.Message }
 type Function struct {
 	Parameters []*expression.Identifier
 	Body       *statement.Block
-	Env        *Environment
+	Env        *Env
 }
 
 func (f *Function) Type() Type { return FUNCTION }
@@ -141,7 +141,7 @@ func (m *Map) String() (s string) {
 	for _, pair := range m.Pairs {
 		s += pair.Key.String() + ": " + pair.Value.String() + ", "
 	}
-	s = s[:len(s)-3] + "}"
+	s = s[:len(s)-1] + "}"
 	return
 }
 

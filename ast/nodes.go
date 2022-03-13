@@ -31,7 +31,7 @@ type Pos struct {
 type Node interface {
 	Literal() string
 	String() string
-	//Pos() Pos
+	// TODO: add Pos() Pos
 }
 
 type Expr interface {

@@ -15,10 +15,10 @@ import (
 
 func TestParser(t *testing.T) {
 	p := Parser{
-		Scanner:        scanner.Scanner{},
-		errs:           nil,
-		curTok:         token.Token{},
-		peekTok:        token.Token{},
+		Scanner: scanner.Scanner{},
+		errs:    nil,
+		curTok:  token.Token{},
+		peekTok: token.Token{},
 	}
 	p.Init("function(a, b) { let zjc = 1+1; return a + b;}")
 	file := p.ParseFile()
@@ -31,8 +31,9 @@ func TestQuickParser(t *testing.T) {
 		//"(1+2)",
 		//"let a = function(a, b) { return a + b; }",
 		//"[1, \"a\", 2];",
-		`{a:1, b:2}[a]`,
+		//`{a:1, b:2}[a]`,
 		//`(1+2)*1+4*2+1*(2*2+1)`,
+		`let a = 2>=1`,
 	}
 	for _, input := range inputs {
 		quickParser(input)
@@ -48,9 +49,16 @@ func quickParser(buf string) {
 	fmt.Println(file.Stats)
 }
 
-
 func TestForParser(t *testing.T) {
-	buf := `for(let i = 0; i < 5; i = i + 1) {}`
+	//buf := `for(let i = 0; i < 5; i = i + 1) {}`
+	buf := `let a = function(i) {
+				if (i == 0) {
+					return 1;
+				}
+				else {
+					return i * function(i-1);
+				}
+			}`
 	//buf := `if(true) {a = a + 2;} `
 	quickParser(buf)
 }

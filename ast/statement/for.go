@@ -14,11 +14,11 @@ import (
 
 // For implements the Expr and Node interface
 type For struct {
-	Token     token.Token
-	InitStat      ast.Stat
-	Condition ast.Expr
-	Body      *Block
-	UpdateStat    ast.Stat
+	Token      token.Token
+	InitStat   ast.Stat
+	Condition  ast.Expr
+	Body       *Block
+	UpdateStat ast.Stat
 }
 
 func (f *For) IsStat()         {}

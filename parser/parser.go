@@ -35,6 +35,8 @@ var PrecedenceMap = map[token.Type]Precedence{
 	token.Neq:    EQUALS,
 	token.Lss:    LESS_GREATER,
 	token.Gtr:    LESS_GREATER,
+	token.Leq:    LESS_GREATER,
+	token.Geq:    LESS_GREATER,
 	token.Plus:   SUM,
 	token.Minus:  SUM,
 	token.Slash:  PRODUCT,
@@ -88,7 +90,8 @@ func (p *Parser) getPrefixParseFunc() func() ast.Expr {
 func (p *Parser) getInfixParseFunc() func(expr ast.Expr) ast.Expr {
 	switch p.peekTok.Type {
 	case token.Plus, token.Minus, token.Star, token.Slash, // +, -, *, /
-		token.Eql, token.Neq, token.Lss, token.Gtr: // ==, != , <, >
+		token.Eql, token.Neq, token.Lss, token.Gtr, // ==, != , <, >
+		token.Geq, token.Leq: // >=, <=
 		return p.parseInfixExpression
 	case token.Lparen:
 		return p.parseCallExpression
