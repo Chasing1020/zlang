@@ -38,13 +38,8 @@ type MapKey struct {
 
 type BuiltinFunction func(args ...Object) Object
 
-func (b BuiltinFunction) Literal() string {
-	panic("implement me")
-}
-
-func (b BuiltinFunction) IsStat() {
-	panic("implement me")
-}
+func (b BuiltinFunction) Literal() string { return "builtin" }
+func (b BuiltinFunction) IsStat()         {}
 
 func (b BuiltinFunction) Type() Type     { return FUNCTION }
 func (b BuiltinFunction) String() string { return "builtin function" }

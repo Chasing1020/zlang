@@ -7,6 +7,8 @@ File: builtin.go
 package runtime
 
 import (
+	"fmt"
+	"strconv"
 	"zlang/object"
 	"zlang/parser"
 )
@@ -39,4 +41,34 @@ func init() {
 			return newError("argument to `len` not supported, got %d", args[0].Type())
 		}
 	}
+
+	builtinFunctions["newArray"] = func(args ...object.Object) object.Object {
+		if len(args) != 1 {
+			newError("newArray param must be a single integer.")
+		}
+		length, err := strconv.Atoi(args[0].String())
+		if err != nil {
+			newError("param can't be negative to a integer'")
+		}
+		elements := make([]object.Object, length)
+		for i := 0; i < length; i++ {
+			elements[i] = &object.Integer{Value: 0}
+		}
+		return &object.Array{Elements: elements}
+	}
+
+	builtinFunctions["print"] = func(args ...object.Object) object.Object {
+		for _, arg := range args {
+			fmt.Print(arg.String())
+		}
+		return &object.Null{}
+	}
+
+	builtinFunctions["println"] = func(args ...object.Object) object.Object {
+		for _, arg := range args {
+			fmt.Println(arg.String())
+		}
+		return &object.Null{}
+	}
+
 }

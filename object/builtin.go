@@ -27,18 +27,6 @@ func (i *Integer) HashCode() HashCode {
 	return HashCode{Type: INTEGER, Value: uint64(i.Value)}
 }
 
-//func (i *Integer) HashCode() HashCode { return HashCode{Type: INTEGER, Value: i.Value} }
-//func (i *Integer) CompareTo(other *Integer) int {
-//	if i.Value == other.Value {
-//		return 0
-//	}
-//	if i.Value > other.Value {
-//		return 1
-//	} else {
-//		return -1
-//	}
-//}
-
 type Boolean struct {
 	Value bool
 }

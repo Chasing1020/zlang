@@ -9,6 +9,8 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"os"
+	"zlang/runtime"
 )
 
 // runCmd represents the run command
@@ -20,9 +22,14 @@ var runCmd = &cobra.Command{
 			fmt.Println("zlang run error: no go files listed")
 			return
 		}
-		//util.Start()
-		fmt.Println(args)
-		fmt.Println("run called")
+		buf, err := os.ReadFile("./" + args[0])
+		if err != nil {
+			panic(err)
+		}
+		err = runtime.Run(string(buf))
+		if err != nil {
+			panic(err)
+		}
 	},
 }
 
