@@ -19,7 +19,7 @@ func TestEvaluator(t *testing.T) {
 	p := parser.Parser{}
 	p.Init(buf)
 	file := p.ParseFile()
-	env := object.NewEnvironment()
+	env := object.NewEnv()
 	eval := Eval(file, env)
 	log.Println(eval)
 }
@@ -32,12 +32,10 @@ func QuickParser(buf string) {
 	fmt.Println(file.Stats)
 }
 
-func TestAssignment(t *testing.T) {
+func TestBoolean(t *testing.T) {
 	inputs := []string{
-		//`let a = 1; a = 2; a;`,
 		`
-		let a = 0; 
-		for (let i = 0; i < 10; i = i + 1) {a = a + i;}
+		let a =  -2 >= -1; 
 		a;
 		`,
 	}
@@ -46,10 +44,29 @@ func TestAssignment(t *testing.T) {
 	}
 }
 
+func TestAssignment(t *testing.T) {
+	inputs := []string{
+		//`let a = 1; a = 2; a;`,
+		//`let a = 0;
+		//for (let i = 0; i <= 100; i = i + 1) {a = a + i;}
+		//a;`,
+		`let a = function(i) {
+		if (i == 0) {return 1;}
+		else {return i * a(i-1);}
+		}
+		a(5);`,
+	}
+	for _, input := range inputs {
+		quickEval(input)
+	}
+}
+
+
 func TestArray(t *testing.T) {
 	inputs := []string{
-		`let nums = [1, 2, 3, 4, 5];
-		nums[0];
+		`let nums = [1, 2,true, "zjc", function(a,b){return a + b;}];
+		nums[0]+nums[1];
+		nums[3](1,2);
 		`,
 	}
 	for _, input := range inputs {
@@ -61,7 +78,7 @@ func quickEval(buf string) {
 	p := parser.Parser{}
 	p.Init(buf)
 	file := p.ParseFile()
-	env := object.NewEnvironment()
+	env := object.NewEnv()
 	eval := Eval(file, env)
 	log.Println(eval)
 }

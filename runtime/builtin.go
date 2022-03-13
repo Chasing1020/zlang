@@ -6,11 +6,27 @@ File: builtin.go
 
 package runtime
 
-import "zlang/object"
+import (
+	"zlang/object"
+	"zlang/parser"
+)
 
 // builtinFunctions: keyword -> builtin function
-var builtinFunctions = map[string]object.BuiltinFunction{
-	"len": func(args ...object.Object) object.Object {
+var builtinFunctions = make(map[string]object.BuiltinFunction)
+
+func init() {
+	builtinFunctions["eval"] = func(args ...object.Object) object.Object {
+		if len(args) != 1 {
+			return newError("wrong number of arguments. got=%d, want=1", len(args))
+		}
+		p := parser.Parser{}
+		p.Init(args[0].String())
+		file := p.ParseFile()
+		env := object.NewEnv()
+		return Eval(file, env)
+	}
+
+	builtinFunctions["len"] = func(args ...object.Object) object.Object {
 		if len(args) != 1 {
 			return newError("wrong number of arguments. got=%d, want=1", len(args))
 		}
@@ -20,7 +36,7 @@ var builtinFunctions = map[string]object.BuiltinFunction{
 		case *object.String:
 			return &object.Integer{Value: len(arg.Value)}
 		default:
-			return newError("argument to `len` not supported, got %s", args[0].Type())
+			return newError("argument to `len` not supported, got %d", args[0].Type())
 		}
-	},
+	}
 }

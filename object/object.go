@@ -38,6 +38,17 @@ type MapKey struct {
 
 type BuiltinFunction func(args ...Object) Object
 
+func (b BuiltinFunction) Literal() string {
+	panic("implement me")
+}
+
+func (b BuiltinFunction) IsStat() {
+	panic("implement me")
+}
+
+func (b BuiltinFunction) Type() Type     { return FUNCTION }
+func (b BuiltinFunction) String() string { return "builtin function" }
+
 func getHashCode(s string) uint32 {
 	var v = crc32.ChecksumIEEE([]byte(s))
 	return v
@@ -48,6 +59,7 @@ func getHashCode(s string) uint32 {
 type Comparable interface {
 	HashCode() HashCode
 }
+
 //
 //type Sortable interface {
 //	CompareTo(object *Object) int

@@ -41,7 +41,7 @@ func Start() {
 
 func StartEvaluator(in io.Reader, out io.Writer) {
 	//s := bufio.NewScanner(in)
-	env := object.NewEnvironment()
+	env := object.NewEnv()
 
 	for {
 		fmt.Printf("> ")
@@ -68,7 +68,7 @@ func StartTTY() {
 		log.Fatal(err)
 	}
 	defer t.Close()
-	env := object.NewEnvironment()
+	env := object.NewEnv()
 	for {
 
 		str, err := t.ReadString()

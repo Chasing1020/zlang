@@ -17,7 +17,7 @@ import (
 // It's same as the eval() function in some dynamic languages:
 // Python: eval(source, globals=None, locals=None, /)
 // JavaScript: declare function eval(x: string): any;
-func Eval(node ast.Node, env *object.Environment) object.Object {
+func Eval(node ast.Node, env *object.Env) object.Object {
 	switch n := node.(type) {
 	// Statements
 	case *ast.File:
@@ -51,7 +51,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return &object.String{Value: n.Value}
 
 	case *expression.Boolean:
-		return nativeBoolToBooleanObject(n.Value)
+		return toBooleanObject(n.Value)
 
 	case *expression.Prefix:
 		right := Eval(n.Right, env)

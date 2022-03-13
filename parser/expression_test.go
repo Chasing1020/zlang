@@ -66,7 +66,8 @@ func TestAssignment(t *testing.T) {
 
 func TestFor(t *testing.T) {
 	inputs := []string{
-		"for(let i=0; i <3; let i = i +1 ){i;} ",
+		//"for(let i=0; i <3; let i = i +1 ){i;} ",
+		"let a= 1+2*3/4+(1+2)/2",
 	}
 	for _, input := range inputs {
 		quickParser(input)
@@ -75,8 +76,10 @@ func TestFor(t *testing.T) {
 
 func TestArray(t *testing.T) {
 	inputs := []string{
-		`let nums = [1, 2, 3, 4, 5];
-		nums[0];
+		`let nums = [1, 2, ture, false, "zjc", function(a,b){return a + b;}];
+		nums[0]+nums[1];
+		nums[2];
+		nums[5](1,2);
 		`,
 	}
 	for _, input := range inputs {

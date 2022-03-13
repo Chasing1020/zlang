@@ -6,22 +6,22 @@ File: heap.go
 
 package object
 
-func NewEnclosedEnvironment(outer *Environment) *Environment {
-	env := NewEnvironment()
+func NewEnclosedEnv(outer *Env) *Env {
+	env := NewEnv()
 	env.outer = outer
 	return env
 }
 
-func NewEnvironment() *Environment {
-	return &Environment{store: make(map[string]Object), outer: nil}
+func NewEnv() *Env {
+	return &Env{store: make(map[string]Object), outer: nil}
 }
 
-type Environment struct {
+type Env struct {
 	store map[string]Object
-	outer *Environment
+	outer *Env
 }
 
-func (e *Environment) Get(name string) (Object, bool) {
+func (e *Env) Get(name string) (Object, bool) {
 	obj, ok := e.store[name]
 	if !ok && e.outer != nil {
 		obj, ok = e.outer.Get(name)
@@ -29,7 +29,7 @@ func (e *Environment) Get(name string) (Object, bool) {
 	return obj, ok
 }
 
-func (e *Environment) Set(name string, val Object) Object {
+func (e *Env) Set(name string, val Object) Object {
 	e.store[name] = val
 	return val
 }
