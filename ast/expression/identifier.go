@@ -14,6 +14,7 @@ type Identifier struct {
 	Value string
 }
 
-func (i *Identifier) IsExpr()          {}
+func (i *Identifier) IsExpr()         {}
+func (i *Identifier) IsAssignable()   {}
 func (i *Identifier) Literal() string { return i.Token.Literal }
 func (i *Identifier) String() string  { return i.Value }

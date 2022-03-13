@@ -66,3 +66,9 @@ func (f *File) String() (s string) {
 	}
 	return
 }
+
+// Assignable expression
+type Assignable interface {
+	Expr
+	IsAssignable()
+}

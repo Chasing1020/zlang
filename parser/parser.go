@@ -17,8 +17,9 @@ import (
 type Precedence uint
 
 const (
-	_ Precedence = iota
-	LOWEST
+	_      Precedence = iota
+	LOWEST       // lowest
+	ASSIGN       // assignment
 	EQUALS       // ==
 	LESS_GREATER // > or <
 	SUM          // +
@@ -29,6 +30,7 @@ const (
 )
 
 var PrecedenceMap = map[token.Type]Precedence{
+	token.Assign: ASSIGN,
 	token.Eql:    EQUALS,
 	token.Neq:    EQUALS,
 	token.Lss:    LESS_GREATER,
@@ -38,7 +40,7 @@ var PrecedenceMap = map[token.Type]Precedence{
 	token.Slash:  PRODUCT,
 	token.Star:   PRODUCT,
 	token.Lparen: CALL,
-	token.Rparen: INDEX,
+	token.Lbrack: INDEX,
 }
 
 type Parser struct {
@@ -49,7 +51,7 @@ type Parser struct {
 	peekTok token.Token
 } // Read two tokens, so curToken and peekToken are both set
 
-func (p *Parser) init(buf string) {
+func (p *Parser) Init(buf string) {
 	p.Scanner.Init(buf, func(line, col uint, msg string) {
 		log.Println("compiler error:", msg, "line:", line, "col:", col)
 	})
@@ -92,6 +94,7 @@ func (p *Parser) getInfixParseFunc() func(expr ast.Expr) ast.Expr {
 		return p.parseCallExpression
 	case token.Lbrack:
 		return p.parseIndexExpression
+
 	}
 	return nil
 }
@@ -115,6 +118,8 @@ func (p *Parser) parseStatement() ast.Stat {
 		return p.parseLetStatement()
 	case token.Return:
 		return p.parseReturnStatement()
+	case token.For:
+		return p.parseForStatement()
 	default:
 		return p.parseExpressionStatement()
 	}
@@ -154,7 +159,7 @@ func (p *Parser) expectPeek(t token.Type) bool {
 		return true
 	} else {
 		p.errs = append(p.errs, fmt.Errorf("expected next token to be %s, got %s instead",
-			token.TokenMap[t], p.peekTok.Type.String()))
+			token.Map[t], p.peekTok.Type.String()))
 		return false
 	}
 }

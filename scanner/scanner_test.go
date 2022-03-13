@@ -41,6 +41,26 @@ func TestAssign(t *testing.T) {
 	quickScan(input)
 }
 
+func TestForLoop(t *testing.T) {
+	//input := `a = 1 + 1`
+	input := `for (let i = 0; i < 10; i = i + 1) {
+	a = a + 1
+}`
+	quickScan(input)
+}
+
+func TestCompare(t *testing.T) {
+	inputs := []string{
+		`<`,
+		//`<=`,
+		//`>`,
+		//`<=`,
+	}
+	for _, input := range inputs {
+		quickScan(input)
+	}
+}
+
 func quickScan(input string) {
 	s := Scanner{}
 	s.Init(input, func(line, col uint, msg string) {
@@ -48,7 +68,7 @@ func quickScan(input string) {
 	})
 	fmt.Println(input)
 	for s.NextTok(); s.Type != token.EOF; s.NextTok() {
-		fmt.Println("token:", token.TokenMap[s.Type], ", literal:", s.Literal)
+		fmt.Println("token:", token.Map[s.Type], ", literal:", s.Literal)
 	}
 	fmt.Println("-----------------")
 }

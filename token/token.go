@@ -14,7 +14,7 @@ import (
 type Type uint
 
 const (
-	UNKNOWN Type = iota
+	UNKNOWN Type = iota // undefined behavior
 	EOF          // EOF
 	Ident
 	Int
@@ -55,6 +55,7 @@ const (
 	Let    // let
 	Return // return
 
+	For    // For
 	Const // const TODO: support const
 )
 
@@ -63,10 +64,11 @@ func (t *Type) String() string {
 	return fmt.Sprintf("%d", t)
 }
 
-var TokenMap = []string{"UNKNOWN", "EOF", "Ident", "Int", "String", "Operator", "Assign",
+// Map used to debug
+var Map = []string{"UNKNOWN", "EOF", "Ident", "Int", "String", "Operator", "Assign",
 	"Plus", "Minus", "Bang", "Star", "Slash", "Eql", "Neq", "Lss", "Leq", "Gtr",
 	"Geq", "Lparen", "Lbrack", "Lbrace", "Rparen", "Rbrack", "Rbrace", "Comma",
-	"Semi", "Colon", "Dot", "DotDotDot", "Function", "True", "False", "If", "Else", "Let", "Return"}
+	"Semi", "Colon", "Dot", "DotDotDot", "Function", "True", "False", "If", "Else", "Let", "Return", "For"}
 
 type Token struct {
 	Type    Type
@@ -74,7 +76,7 @@ type Token struct {
 }
 
 func (t Token) String() string {
-	return fmt.Sprintf("type: %s , literal:%s", TokenMap[t.Type], t.Literal)
+	return fmt.Sprintf("type: %s , literal:%s", Map[t.Type], t.Literal)
 }
 
 type LitKind uint8
@@ -93,4 +95,5 @@ var KeywordMap = map[string]Type{
 	"if":       If,
 	"else":     Else,
 	"return":   Return,
+	"for":      For,
 }

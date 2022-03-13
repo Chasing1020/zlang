@@ -28,11 +28,9 @@ func (s *Scanner) Init(buf string, errHandler func(line, col uint, msg string)) 
 
 // NextTok Get the NextTok token
 func (s *Scanner) NextTok() {
-	defer func() {
-		if s.err != nil && s.err != io.EOF {
-			panic(s.err)
-		}
-	}()
+	if s.err != nil && s.err != io.EOF {
+		panic(s.err)
+	}
 
 	// skip blank
 	for s.ch == ' ' || s.ch == '\t' || s.ch == '\n' || s.ch == '\r' {
@@ -43,14 +41,16 @@ func (s *Scanner) NextTok() {
 	case '=':
 		if s.peekChar() == '=' {
 			ch := s.ch
-			s.NextTok()
+			s.nextCh()
 			s.Token = token.Token{Type: token.Eql, Literal: string(ch) + string(s.ch)}
 		} else {
 			s.Token = token.Token{Type: token.Assign, Literal: string(s.ch)}
 		}
 	case '+':
+		// TODO: add incr
 		s.Token = token.Token{Type: token.Plus, Literal: string(s.ch)}
 	case '-':
+		// TODO: add decr
 		s.Token = token.Token{Type: token.Minus, Literal: string(s.ch)}
 	case '!':
 		if s.peekChar() == '=' {
@@ -65,9 +65,21 @@ func (s *Scanner) NextTok() {
 	case '*':
 		s.Token = token.Token{Type: token.Star, Literal: string(s.ch)}
 	case '<':
-		s.Token = token.Token{Type: token.Lss, Literal: string(s.ch)}
+		if s.peekChar() == '=' {
+			ch := s.ch
+			s.nextCh()
+			s.Token = token.Token{Type: token.Leq, Literal: string(ch) + string(s.ch)}
+		} else {
+			s.Token = token.Token{Type: token.Lss, Literal: string(s.ch)}
+		}
 	case '>':
-		s.Token = token.Token{Type: token.Gtr, Literal: string(s.ch)}
+		if s.peekChar() == '=' {
+			ch := s.ch
+			s.nextCh()
+			s.Token = token.Token{Type: token.Geq, Literal: string(ch) + string(s.ch)}
+		} else {
+			s.Token = token.Token{Type: token.Gtr, Literal: string(s.ch)}
+		}
 	case ';':
 		s.Token = token.Token{Type: token.Semi, Literal: string(s.ch)}
 	case ',':
@@ -110,7 +122,7 @@ func (s *Scanner) NextTok() {
 }
 
 func (s *Scanner) peekChar() byte {
-	if s.index+1 > len(s.buf) {
+	if s.index+1 >= len(s.buf) {
 		s.err = io.EOF
 		return 0
 	} else {

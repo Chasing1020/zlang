@@ -1,7 +1,7 @@
 /*
 Copyright © 2022 zjc <chasing1020@gmail.com>
 Time: 2022/3/11-11:01 PM
-File: satement.go
+File: statement.go
 */
 
 package parser
@@ -101,7 +101,7 @@ func (p *Parser) parseIfExpression() ast.Expr {
 func (p *Parser) parseBlockStatement() *statement.Block {
 	b := &statement.Block{Token: p.curTok}
 	p.nextToken()
-	for !p.curTokenIs(token.Lbrace) && !p.curTokenIs(token.EOF) {
+	for !p.curTokenIs(token.Rbrace) && !p.curTokenIs(token.EOF) {
 		stat := p.parseStatement()
 		if stat != nil {
 			b.Statements = append(b.Statements, stat)
@@ -125,7 +125,6 @@ func (p *Parser) parseFunction() ast.Expr {
 	f.Body = p.parseBlockStatement()
 	return f
 }
-
 
 // parseFunctionParameters
 // Parameters -> (Expression)* (, Expression)*
@@ -152,3 +151,51 @@ func (p *Parser) parseFunctionParameters() []*expression.Identifier {
 	}
 	return identifiers
 }
+
+// parseForStatement
+// For -> for '(' InitStat; Condition; UpdateStat ')' { Body }
+func (p *Parser) parseForStatement() *statement.For {
+	f := &statement.For{Token: p.curTok}
+	p.nextToken()
+	p.nextToken()
+	f.InitStat = p.parseLetStatement()
+	//p.nextToken()
+	if p.curTokenIs(token.Semi) {
+		p.nextToken()
+	}
+	f.Condition = p.parseExpression(LOWEST)
+	p.nextToken()
+	if p.curTokenIs(token.Semi) {
+		p.nextToken()
+	}
+	f.UpdateStat = p.parseStatement()
+	p.nextToken()
+	p.nextToken()
+	f.Body = p.parseBlockStatement()
+	return f
+}
+
+// s := &statement.If{Token: p.curTok}
+//	if !p.expectPeek(token.Lparen) {
+//		return nil
+//	}
+//	p.nextToken()
+//	s.Condition = p.parseExpression(LOWEST)
+//
+//	// TODO: determine if this a boolean expression
+//	// switch e.Condition.(type) {
+//	// }
+//
+//	if !p.expectPeek(token.Rparen) || !p.expectPeek(token.Lbrace) {
+//		return nil
+//	}
+//
+//	s.Consequence = p.parseBlockStatement()
+//	if p.peekTokenIs(token.Else) {
+//		p.nextToken()
+//		if !p.expectPeek(token.Lbrace) {
+//			return nil
+//		}
+//		s.Alternative = p.parseBlockStatement()
+//	}
+//	return s

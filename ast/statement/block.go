@@ -24,6 +24,6 @@ func (bs *Block) String() (s string) {
 	for _, statement := range bs.Statements {
 		s += "\t" + statement.String() + "\n"
 	}
-	s = s[:len(s)-3] + "}"
+	s = s[:len(s)-1] + "\n}"
 	return
 }
