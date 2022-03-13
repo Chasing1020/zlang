@@ -12,6 +12,7 @@ import (
 	"strconv"
 	"zlang/ast"
 	"zlang/ast/expression"
+	"zlang/ast/statement"
 	"zlang/token"
 )
 
@@ -31,15 +32,19 @@ func (p *Parser) parseExpression(precedence Precedence) ast.Expr {
 	leftExp := prefixFunc()
 
 	for !p.peekTokenIs(token.Semi) && precedence < p.peekPrecedence() {
-		//infixFunc := p.infixParseFns[p.curTok.Type]
-		infixFunc := p.getInfixParseFunc()
-		if infixFunc == nil {
-			return leftExp
+		if p.peekTok.Type == token.Assign {
+			leftExp = p.parseAssignmentExpression(leftExp)
+		} else {
+			//infixFunc := p.infixParseFns[p.curTok.Type]
+			infixFunc := p.getInfixParseFunc()
+			if infixFunc == nil {
+				return leftExp
+			}
+
+			p.nextToken()
+
+			leftExp = infixFunc(leftExp)
 		}
-
-		p.nextToken()
-
-		leftExp = infixFunc(leftExp)
 	}
 	return leftExp
 }
@@ -92,7 +97,7 @@ func (p *Parser) parseInteger() ast.Expr {
 		return nil
 	}
 
-	lit.Value = int64(value)
+	lit.Value = value
 	return lit
 }
 
@@ -123,7 +128,7 @@ func (p *Parser) parseGroupedExpression() ast.Expr {
 }
 
 // parseCallExpression
-// Expression -> FunctionName( ExpressionList )
+// Expression -> FunctionName'(' ExpressionList ')'
 func (p *Parser) parseCallExpression(function ast.Expr) ast.Expr {
 	exp := &expression.Call{Token: p.curTok, Function: function}
 	exp.Arguments = p.parseExpressionList(token.Rparen)
@@ -207,4 +212,26 @@ func (p *Parser) parseMapLiteral() ast.Expr {
 		return nil
 	}
 	return hash
+}
+
+// parseAssignmentExpression
+// Statement -> Assignable = Expression
+func (p *Parser) parseAssignmentExpression(left ast.Expr) ast.Expr {
+	stmt := &statement.Assignment{Token: token.Token{Type: token.Assign, Literal: "="}}
+	// if the next statement is not an assignable
+	assignable, ok := left.(ast.Assignable)
+	if !ok {
+		p.errs = append(p.errs, fmt.Errorf("expression %s is not assignable", left))
+	}
+	stmt.Left = assignable
+	if !p.expectPeek(token.Assign) {
+		return nil
+	}
+	p.nextToken()
+	stmt.Right = p.parseExpression(LOWEST)
+
+	if p.peekTokenIs(token.Semi) {
+		p.nextToken()
+	}
+	return stmt
 }

@@ -6,6 +6,10 @@ File: object.go
 
 package object
 
+import (
+	"hash/crc32"
+)
+
 type Type uint
 
 const (
@@ -27,10 +31,16 @@ type Object interface {
 	String() string
 }
 
-
-type HashCode struct {
+type MapKey struct {
 	Type  Type
-	Value int
+	Value uint64
+}
+
+type BuiltinFunction func(args ...Object) Object
+
+func getHashCode(s string) uint32 {
+	var v = crc32.ChecksumIEEE([]byte(s))
+	return v
 }
 
 // Comparable
@@ -38,11 +48,7 @@ type HashCode struct {
 type Comparable interface {
 	HashCode() HashCode
 }
-
-type Sortable interface {
-	CompareTo(object *Object) int
-}
-
-
-//eval(source, globals=None, locals=None, /)
-//Evaluate the given source in the context of globals and locals.
+//
+//type Sortable interface {
+//	CompareTo(object *Object) int
+//}

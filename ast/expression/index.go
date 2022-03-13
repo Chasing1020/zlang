@@ -12,7 +12,7 @@ import (
 	"zlang/token"
 )
 
-// Index implement the Node and Expr interface.
+// Index implement the Expr and Assignable interface.
 type Index struct {
 	Token token.Token // The [ token
 	Left  ast.Expr
@@ -20,6 +20,7 @@ type Index struct {
 }
 
 func (i *Index) IsExpr()         {}
+func (i *Index) IsAssignable()   {}
 func (i *Index) Literal() string { return i.Token.Literal }
 func (i *Index) String() string {
 	return fmt.Sprintf("(%s[%s])", i.Left.String(), i.Index.String())

@@ -11,9 +11,9 @@ import "zlang/token"
 // Integer implement the Node and Expr interface
 type Integer struct {
 	Token token.Token
-	Value int64
+	Value int
 }
 
-func (il *Integer) IsExpr()         {}
-func (il *Integer) Literal() string { return il.Token.Literal }
-func (il *Integer) String() string  { return il.Token.Literal }
+func (i *Integer) IsExpr()         {}
+func (i *Integer) Literal() string { return i.Token.Literal }
+func (i *Integer) String() string  { return i.Token.Literal }

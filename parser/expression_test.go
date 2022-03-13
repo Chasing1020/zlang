@@ -54,3 +54,32 @@ func TestBoolean(t *testing.T) {
 		quickParser(input)
 	}
 }
+
+func TestAssignment(t *testing.T) {
+	inputs := []string{
+		"a = a + 1",
+	}
+	for _, input := range inputs {
+		quickParser(input)
+	}
+}
+
+func TestFor(t *testing.T) {
+	inputs := []string{
+		"for(let i=0; i <3; let i = i +1 ){i;} ",
+	}
+	for _, input := range inputs {
+		quickParser(input)
+	}
+}
+
+func TestArray(t *testing.T) {
+	inputs := []string{
+		`let nums = [1, 2, 3, 4, 5];
+		nums[0];
+		`,
+	}
+	for _, input := range inputs {
+		quickParser(input)
+	}
+}
