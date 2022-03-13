@@ -236,8 +236,8 @@ func applyFunction(fn object.Object, args []object.Object) object.Object {
 		evaluated := Eval(f.Body, extendedEnv)
 		return unwrapReturnValue(evaluated)
 		//return evaluated
-	case *object.Builtin:
-		return f.Func(args...)
+	case object.BuiltinFunction:
+		return f(args...)
 	default:
 		return newError("not a function: %d", fn.Type())
 	}

@@ -64,10 +64,11 @@ func TestAssignment(t *testing.T) {
 
 func TestArray(t *testing.T) {
 	inputs := []string{
-		`let nums = [1, 2,true, "zjc", function(a,b){return a + b;}];
-		nums[0]+nums[1];
-		nums[3](1,2);
-		`,
+		//`let nums = [1, 2,true, "zjc", function(a,b){return a + b;}];
+		//nums[0]+nums[1];
+		//nums[3](1,2);
+		//`,
+		`print(1)`,
 	}
 	for _, input := range inputs {
 		quickEval(input)

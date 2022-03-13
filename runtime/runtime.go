@@ -7,10 +7,12 @@ File: runtime.go
 package runtime
 
 import (
+	"errors"
 	"zlang/ast"
 	"zlang/ast/expression"
 	"zlang/ast/statement"
 	"zlang/object"
+	"zlang/parser"
 )
 
 // Eval will translate the given node into an object.Object.
@@ -131,6 +133,19 @@ func Eval(node ast.Node, env *object.Env) object.Object {
 			return &object.Error{Message: "use of undeclared identifier:" + n.Left.String()}
 		}
 		env.Set(n.Left.String(), right)
+	}
+	return nil
+}
+
+func Run(buf string) error {
+	p := parser.Parser{}
+	p.Init(buf)
+	file := p.ParseFile()
+	env := object.NewEnv()
+	evaluated := Eval(file, env)
+	_, ok := evaluated.(*object.Error)
+	if ok {
+		return errors.New(evaluated.String())
 	}
 	return nil
 }

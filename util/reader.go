@@ -10,9 +10,9 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/mattn/go-tty"
-	"io"
 	"log"
 	"os"
+	"os/signal"
 	"zlang/object"
 	"zlang/parser"
 	"zlang/runtime"
@@ -20,7 +20,7 @@ import (
 	"zlang/token"
 )
 
-func Start() {
+func StartScanner() {
 	ioScanner := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Printf("> ")
@@ -39,29 +39,40 @@ func Start() {
 	}
 }
 
-func StartEvaluator(in io.Reader, out io.Writer) {
-	//s := bufio.NewScanner(in)
+func StartEvaluator() {
+	ioScanner := bufio.NewScanner(os.Stdin)
 	env := object.NewEnv()
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, os.Kill)
+	go func() {
+		<-c
+		fmt.Println("\n(To exit, press Ctrl+C again or Ctrl+D)")
+		fmt.Print("> ")
+		<-c
+		os.Exit(0)
+	}()
 
 	for {
 		fmt.Printf("> ")
-
-		r := bufio.NewReader(os.Stdin)
-		str, _ := r.ReadString('\n')
+		line := ioScanner.Scan()
+		if !line {
+			return
+		}
 
 		p := parser.Parser{}
-		//p.Init(s.Text())
-		p.Init(str)
+		p.Init(ioScanner.Text())
+
 		file := p.ParseFile()
 
 		evaluated := runtime.Eval(file, env)
 		if evaluated != nil {
-			io.WriteString(out, evaluated.String())
-			io.WriteString(out, "\n")
+			fmt.Println(evaluated.String())
 		}
 	}
 }
 
+// StartTTY
+// TODO: fix keyboard arrows problem: ^[[A ^[[B ^[[C ^[[D
 func StartTTY() {
 	t, err := tty.Open()
 	if err != nil {
@@ -83,8 +94,7 @@ func StartTTY() {
 
 		evaluated := runtime.Eval(file, env)
 		if evaluated != nil {
-			io.WriteString(os.Stdout, evaluated.String())
-			io.WriteString(os.Stdout, "\n")
+			fmt.Println(evaluated.String())
 		}
 		// handle key event
 	}

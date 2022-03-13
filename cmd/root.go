@@ -22,8 +22,8 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(`Welcome to zLang v0.0.1.`)
 		fmt.Println(`Type "help" for more information.`)
-		util.Start()
-		fmt.Println("root cmd")
+		util.StartEvaluator()
+		fmt.Println("KeyboardInterrupt: EOF, program exited.")
 	},
 }
 
