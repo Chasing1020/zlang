@@ -123,4 +123,55 @@ func init() {
 		}
 		return &object.Integer{Value: integer}
 	}
+
+	builtinFunctions["max"] = func(args ...object.Object) object.Object {
+		if len(args) != 2 {
+			newError("call max() error: wrong number of arguments. got=%d", len(args))
+		}
+		if args[0].Type() == object.INTEGER && args[1].Type() == object.INTEGER {
+			a := args[0].(*object.Integer).Value
+			b := args[1].(*object.Integer).Value
+			if a > b {
+				return args[0]
+			} else {
+				return args[1]
+			}
+		}
+		return newError("invalid literal for max(), only accepts integers.")
+	}
+
+	builtinFunctions["min"] = func(args ...object.Object) object.Object {
+		if len(args) != 2 {
+			newError("call min() error: wrong number of arguments. got=%d", len(args))
+		}
+		if args[0].Type() == object.INTEGER && args[1].Type() == object.INTEGER {
+			a := args[0].(*object.Integer).Value
+			b := args[1].(*object.Integer).Value
+			if a < b {
+				return args[0]
+			} else {
+				return args[1]
+			}
+		}
+		return newError("invalid literal for min(), only accepts integers.")
+	}
+
+	builtinFunctions["append"] = func(args ...object.Object) object.Object {
+		if len(args) != 2 {
+			return newError("wrong number of arguments. got=%d, want=2",
+				len(args))
+		}
+		if args[0].Type() != object.ARRAY {
+			return newError("argument to `push` must be ARRAY, got %s",
+				args[0].Type())
+		}
+		arr := args[0].(*object.Array)
+		length := len(arr.Elements)
+
+		newElements := make([]object.Object, length+1, length+1)
+		copy(newElements, arr.Elements)
+		newElements[length] = args[1]
+
+		return &object.Array{Elements: newElements}
+	}
 }

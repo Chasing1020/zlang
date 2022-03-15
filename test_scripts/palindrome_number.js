@@ -22,4 +22,7 @@ let isPalindrome = function (x) {
     return true;
 }
 
-print(isPalindrome(12321));
+
+print("Please enter a number:");
+let input = int(input());
+print(isPalindrome(input));
