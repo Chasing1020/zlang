@@ -21,6 +21,9 @@ type Scanner struct {
 }
 
 func (s *Scanner) Init(buf string, errHandler func(line, col uint, msg string)) {
+	if len(buf) == 0 {
+		return
+	}
 	s.source.init(buf, errHandler)
 	s.ch = s.buf[0]
 	s.nextCh()
@@ -30,6 +33,10 @@ func (s *Scanner) Init(buf string, errHandler func(line, col uint, msg string)) 
 func (s *Scanner) NextTok() {
 	if s.err != nil && s.err != io.EOF {
 		panic(s.err)
+	}
+
+	if s.err == io.EOF {
+		s.Type = token.EOF
 	}
 
 	// skip blank
@@ -48,9 +55,22 @@ func (s *Scanner) NextTok() {
 		}
 	case '+':
 		// TODO: add incr
-		s.Token = token.Token{Type: token.Plus, Literal: string(s.ch)}
+		if s.peekChar() == '+' {
+			ch := s.ch
+			s.nextCh()
+			s.Token = token.Token{Type: token.Incr, Literal: string(ch) + string(s.ch)}
+		} else {
+			s.Token = token.Token{Type: token.Plus, Literal: string(s.ch)}
+		}
 	case '-':
 		// TODO: add decr
+		if s.peekChar() == '-' {
+			ch := s.ch
+			s.nextCh()
+			s.Token = token.Token{Type: token.Decr, Literal: string(ch) + string(s.ch)}
+		} else {
+			s.Token = token.Token{Type: token.Plus, Literal: string(s.ch)}
+		}
 		s.Token = token.Token{Type: token.Minus, Literal: string(s.ch)}
 	case '!':
 		if s.peekChar() == '=' {

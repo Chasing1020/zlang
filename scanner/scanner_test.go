@@ -8,6 +8,7 @@ package scanner
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"testing"
 	"zlang/token"
@@ -51,8 +52,8 @@ func TestForLoop(t *testing.T) {
 
 func TestCompare(t *testing.T) {
 	inputs := []string{
-		`let a = 2>=1`,
-
+		`let a = 2++;`,
+		``,
 		//`<=`,
 		//`>`,
 		//`<=`,
@@ -68,7 +69,7 @@ func quickScan(input string) {
 		log.Println("line:", line, "col:", col, "msg:", msg)
 	})
 	fmt.Println(input)
-	for s.NextTok(); s.Type != token.EOF; s.NextTok() {
+	for s.NextTok(); s.err != io.EOF; s.NextTok() {
 		fmt.Println("token:", token.Map[s.Type], ", literal:", s.Literal)
 	}
 	fmt.Println("-----------------")

@@ -56,6 +56,8 @@ const (
 	Return // return
 
 	For    // for
+	Incr // incr
+	Decr  // decr
 	Const  // const TODO: support const
 )
 
@@ -68,7 +70,7 @@ func (t *Type) String() string {
 var Map = []string{"UNKNOWN", "EOF", "Ident", "Int", "String", "Operator", "Assign",
 	"Plus", "Minus", "Bang", "Star", "Slash", "Eql", "Neq", "Lss", "Leq", "Gtr",
 	"Geq", "Lparen", "Lbrack", "Lbrace", "Rparen", "Rbrack", "Rbrace", "Comma",
-	"Semi", "Colon", "Dot", "DotDotDot", "Function", "True", "False", "If", "Else", "Let", "Return", "For"}
+	"Semi", "Colon", "Dot", "DotDotDot", "Function", "True", "False", "If", "Else", "Let", "Return", "For","Incr","Decr"}
 
 type Token struct {
 	Type    Type
