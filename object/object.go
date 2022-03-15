@@ -26,6 +26,9 @@ const (
 	MAP
 )
 
+var TypeMap = map[Type]string{NULL: "Null", ERROR: "Error", INTEGER: "Integer", BOOLEAN: "Boolean",
+	STRING: "String", RETURN: "Return", FUNCTION: "Function", BUILTIN: "Builtin", ARRAY: "Array", MAP: "Map"}
+
 type Object interface {
 	Type() Type
 	String() string

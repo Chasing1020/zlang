@@ -7,7 +7,9 @@ File: builtin.go
 package runtime
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"strconv"
 	"zlang/object"
 	"zlang/parser"
@@ -28,6 +30,17 @@ func init() {
 		return Eval(file, env)
 	}
 
+	builtinFunctions["type"] = func(args ...object.Object) object.Object {
+		if len(args) != 1 {
+			return newError("wrong number of arguments. got=%d, want=1", len(args))
+		}
+		objectType, ok := object.TypeMap[args[0].Type()]
+		if !ok {
+			objectType = "UNKNOWN"
+		}
+		return &object.String{Value: objectType}
+	}
+
 	builtinFunctions["len"] = func(args ...object.Object) object.Object {
 		if len(args) != 1 {
 			return newError("wrong number of arguments. got=%d, want=1", len(args))
@@ -44,11 +57,11 @@ func init() {
 
 	builtinFunctions["newArray"] = func(args ...object.Object) object.Object {
 		if len(args) != 1 {
-			newError("newArray param must be a single integer.")
+			newError("wrong number of arguments. got=%d, want=1", len(args))
 		}
 		length, err := strconv.Atoi(args[0].String())
 		if err != nil {
-			newError("param can't be negative to a integer'")
+			newError("param can't be negative to a integer")
 		}
 		elements := make([]object.Object, length)
 		for i := 0; i < length; i++ {
@@ -71,4 +84,33 @@ func init() {
 		return &object.Null{}
 	}
 
+	builtinFunctions["input"] = func(args ...object.Object) object.Object {
+		if len(args) != 0 {
+			newError("input error: wrong number of arguments. got=%d", len(args))
+		}
+		scanner := bufio.NewScanner(os.Stdin)
+		ok := scanner.Scan()
+		if !ok {
+			newError("input error: except io.EOF failed")
+		}
+		return &object.String{Value: scanner.Text()}
+	}
+
+	builtinFunctions["string"] = func(args ...object.Object) object.Object {
+		if len(args) != 1 {
+			newError("string cast error: int() only accepts one argument")
+		}
+		return &object.String{Value: args[0].String()}
+	}
+
+	builtinFunctions["int"] = func(args ...object.Object) object.Object {
+		if len(args) != 1 {
+			newError("int cast error: int() only accepts one argument")
+		}
+		integer, err := strconv.Atoi(args[0].String())
+		if err != nil {
+			newError("invalid literal for int() with base 10: %s", args[0].String())
+		}
+		return &object.Integer{Value: integer}
+	}
 }
