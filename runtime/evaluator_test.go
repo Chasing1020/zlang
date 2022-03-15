@@ -73,9 +73,9 @@ func TestArray(t *testing.T) {
 		//`let a = eval(1+1*2);
 		//println(a)
 		//println(string(a))`,
-		`// This is a comment that
-		let a = 10;
-		println(a);`,
+		//`// This is a comment that
+		//let a = 10;`,
+		`3!=5`,
 	}
 	for _, input := range inputs {
 		quickEval(input)
@@ -93,6 +93,13 @@ for (let i = 0; i < len(nums); i = i + 1) {
        printf("Answer found: [%s] [%s]", i, dict[nums[i]]);
    }
 }`
+	quickEval(buf)
+}
+
+func TestFor(t *testing.T) {
+	buf := `let i = 0;	
+	for(;i<5;){i=i+1;}	
+`
 	quickEval(buf)
 }
 

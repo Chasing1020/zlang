@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// rootCmd represents the base command when called without any subcommands
+// versionCmd represents the base command when called without any subcommands
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "show the version of the zlang",
@@ -22,10 +22,6 @@ var versionCmd = &cobra.Command{
 	},
 }
 
-
 func init() {
 	rootCmd.AddCommand(versionCmd)
 }
-
-
-

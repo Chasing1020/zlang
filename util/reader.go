@@ -9,7 +9,6 @@ package util
 import (
 	"bufio"
 	"fmt"
-	"github.com/mattn/go-tty"
 	"log"
 	"os"
 	"os/signal"
@@ -20,6 +19,8 @@ import (
 	"zlang/token"
 )
 
+// StartScanner
+// TODO: fix keyboard arrows problem: ^[[A ^[[B ^[[C ^[[D
 func StartScanner() {
 	ioScanner := bufio.NewScanner(os.Stdin)
 	for {
@@ -68,34 +69,5 @@ func StartEvaluator() {
 		if evaluated != nil {
 			fmt.Println(evaluated.String())
 		}
-	}
-}
-
-// StartTTY
-// TODO: fix keyboard arrows problem: ^[[A ^[[B ^[[C ^[[D
-func StartTTY() {
-	t, err := tty.Open()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer t.Close()
-	env := object.NewEnv()
-	for {
-
-		str, err := t.ReadString()
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		p := parser.Parser{}
-		//p.Init(s.Text())
-		p.Init(str)
-		file := p.ParseFile()
-
-		evaluated := runtime.Eval(file, env)
-		if evaluated != nil {
-			fmt.Println(evaluated.String())
-		}
-		// handle key event
 	}
 }

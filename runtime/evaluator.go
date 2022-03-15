@@ -122,6 +122,8 @@ func evalIntegerInfixExpression(operator string, left, right object.Object) obje
 		return &object.Integer{Value: leftVal * rightVal}
 	case "/":
 		return &object.Integer{Value: leftVal / rightVal}
+	case "%":
+		return &object.Integer{Value: leftVal % rightVal}
 	case "<":
 		return toBooleanObject(leftVal < rightVal)
 	case ">":
@@ -135,7 +137,7 @@ func evalIntegerInfixExpression(operator string, left, right object.Object) obje
 	case "!=":
 		return toBooleanObject(leftVal != rightVal)
 	default:
-		return newError("unknown operator: %s %d",operator, right.Type())
+		return newError("unknown operator: %s %d", operator, right.Type())
 	}
 }
 
@@ -159,16 +161,25 @@ func evalIfExpression(i *statement.If, env *object.Env) object.Object {
 	} else if i.Alternative != nil {
 		return Eval(i.Alternative, env)
 	} else {
-		return NullObject
+		return nil
 	}
 }
 
+// evalForStatement returns nil means the expression will not be printed.
 func evalForStatement(f *statement.For, env *object.Env) object.Object {
 	Eval(f.InitStat, env)
+
+	// for(;;) means the endless loop
+	if f.Condition == nil {
+		Eval(f.Body, env)
+		Eval(f.UpdateStat, env)
+	}
+
 	condition := Eval(f.Condition, env)
 	if isError(condition) {
 		return condition
 	}
+
 	for isTruthy(condition) {
 		Eval(f.Body, env)
 		Eval(f.UpdateStat, env)
@@ -177,7 +188,7 @@ func evalForStatement(f *statement.For, env *object.Env) object.Object {
 			return condition
 		}
 	}
-	return NullObject
+	return nil
 }
 
 func evalIdentifier(node *expression.Identifier, env *object.Env) object.Object {

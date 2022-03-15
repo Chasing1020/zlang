@@ -14,6 +14,6 @@ type Boolean struct {
 	Value bool
 }
 
-func (b *Boolean) IsExpr()          {}
+func (b *Boolean) IsExpr()         {}
 func (b *Boolean) Literal() string { return b.Token.Literal }
 func (b *Boolean) String() string  { return b.Token.Literal }

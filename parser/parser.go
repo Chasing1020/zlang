@@ -18,15 +18,15 @@ type Precedence uint
 
 const (
 	_      Precedence = iota
-	LOWEST       // lowest
-	ASSIGN       // assignment
-	EQUALS       // ==
-	LESS_GREATER // > or <
-	SUM          // +
-	PRODUCT      // *
-	PREFIX       // -X or !X
-	CALL         // myFunction(X)
-	INDEX        // array[index]
+	LOWEST            // lowest
+	ASSIGN            // assignment
+	EQUALS            // ==
+	LESS_GREATER      // > or <
+	SUM               // +
+	PRODUCT           // *
+	PREFIX            // -X or !X
+	CALL              // myFunction(X)
+	INDEX             // array[index]
 )
 
 var PrecedenceMap = map[token.Type]Precedence{

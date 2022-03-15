@@ -43,12 +43,10 @@ func (b *Boolean) HashCode() HashCode {
 	return HashCode{Type: b.Type(), Value: value}
 }
 
-
 type Null struct{}
 
 func (n *Null) Type() Type     { return NULL }
 func (n *Null) String() string { return "null" }
-
 
 type Error struct {
 	Message string

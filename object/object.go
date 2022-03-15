@@ -13,7 +13,7 @@ import (
 type Type uint
 
 const (
-	_ Type = iota
+	UNKNOWN Type = iota
 	NULL
 	ERROR
 	INTEGER

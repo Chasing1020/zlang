@@ -16,6 +16,7 @@ func NewEnclosedEnv(outer *Env) *Env {
 
 func NewEnv() *Env {
 	e := &Env{store: make(map[string]Object), outer: nil}
+	// &Null == &Null always be true, cause every struct{}{} pointed to the same place.
 	e.Set("null", &Null{})
 	return e
 }
@@ -41,7 +42,7 @@ func (e *Env) Set(name string, val Object) Object {
 func (e *Env) SetIndex(name string, index, val Object) Object {
 	switch k := e.store[name].(type) {
 	case *Array:
-		// TODO: support 2d Array
+		// TODO: support nd Array
 		if index.Type() == INTEGER {
 			k.Elements[index.(*Integer).Value] = val
 		} else {

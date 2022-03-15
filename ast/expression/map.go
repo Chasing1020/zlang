@@ -18,7 +18,7 @@ type Map struct {
 	Pairs map[ast.Expr]ast.Expr
 }
 
-func (h *Map) IsExpr()      {}
+func (h *Map) IsExpr()         {}
 func (h *Map) Literal() string { return h.Token.Literal }
 func (h *Map) String() string {
 	if len(h.Pairs) == 0 {
