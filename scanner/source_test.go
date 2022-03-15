@@ -23,3 +23,4 @@ func TestNextCh(t *testing.T) {
 		fmt.Println(s.pos())
 	}
 }
+

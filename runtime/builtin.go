@@ -77,6 +77,16 @@ func init() {
 		return &object.Null{}
 	}
 
+	builtinFunctions["printf"] = func(args ...object.Object) object.Object {
+		format := args[0].String()
+		var a []interface{}
+		for _, arg := range args[1:] {
+			a = append(a, arg.String())
+		}
+		fmt.Println(fmt.Sprintf(format, a...))
+		return &object.Null{}
+	}
+
 	builtinFunctions["println"] = func(args ...object.Object) object.Object {
 		for _, arg := range args {
 			fmt.Println(arg.String())

@@ -33,7 +33,8 @@ func TestQuickParser(t *testing.T) {
 		//"[1, \"a\", 2];",
 		//`{a:1, b:2}[a]`,
 		//`(1+2)*1+4*2+1*(2*2+1)`,
-		`let a = 2>=1`,
+		//`let a = 5%2`,
+		`// This is a comment`,
 	}
 	for _, input := range inputs {
 		quickParser(input)

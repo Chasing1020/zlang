@@ -21,6 +21,9 @@ type Map struct {
 func (h *Map) IsExpr()      {}
 func (h *Map) Literal() string { return h.Token.Literal }
 func (h *Map) String() string {
+	if len(h.Pairs) == 0 {
+		return "{}"
+	}
 	var pairs []string
 	for key, value := range h.Pairs {
 		pairs = append(pairs, key.String()+":"+value.String())

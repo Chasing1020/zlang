@@ -81,7 +81,16 @@ func (s *Scanner) NextTok() {
 			s.Token = token.Token{Type: token.Bang, Literal: string(s.ch)}
 		}
 	case '/':
+		if s.peekChar() == '/' {
+			for s.ch != '\n' && s.err == nil{
+				s.nextCh()
+			}
+			s.Token = token.Token{Type: token.Comment, Literal: "//"}
+			return
+		}
 		s.Token = token.Token{Type: token.Slash, Literal: string(s.ch)}
+	case '%':
+		s.Token = token.Token{Type: token.Mod, Literal: string(s.ch)}
 	case '*':
 		s.Token = token.Token{Type: token.Star, Literal: string(s.ch)}
 	case '<':
@@ -187,15 +196,15 @@ func (s *Scanner) readString() (res string) {
 func (s *Scanner) ident() string {
 	index := s.index
 	// accelerate common case (7bit ASCII)
-	for isLetter(s.ch) || isDigit(s.ch) {
+	for isLetter(s.ch) || isDigit(s.ch) && s.err != io.EOF {
 		s.nextCh()
 	}
-	// general case
-	if s.ch >= utf8.RuneSelf {
-		for s.readIdentChar(false) {
-			s.nextCh()
-		}
-	}
+	//// general case
+	//if s.ch >= utf8.RuneSelf {
+	//	for s.readIdentChar(false) {
+	//		s.nextCh()
+	//	}
+	//}
 	return s.buf[index:s.index]
 }
 

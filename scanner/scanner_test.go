@@ -52,8 +52,8 @@ func TestForLoop(t *testing.T) {
 
 func TestCompare(t *testing.T) {
 	inputs := []string{
-		`let a = 2++;`,
-		``,
+		//`12345`,
+		`// This is a comment`,
 		//`<=`,
 		//`>`,
 		//`<=`,
