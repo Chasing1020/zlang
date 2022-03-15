@@ -178,6 +178,9 @@ func (p *Parser) parseForStatement() *statement.For {
 		f.UpdateStat = p.parseStatement()
 	}
 	p.nextToken()
+	if p.peekTok.Type == token.Lbrace{ // peek = Lbrace
+		p.nextToken()
+	}
 	f.Body = p.parseBlockStatement()
 	return f
 }

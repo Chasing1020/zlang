@@ -90,25 +90,15 @@ func TestForParser(t *testing.T) {
 	//			}
 	//		}`
 	//buf := `if(true) {a = a + 2;} `
-	buf := `let isPalindrome = function (x) {
-    if (x < 0) {
-        return false;
-    }
-    let div = 1;
-    for (; x / div >= 10;) {
-        div *= 10;
-    }
-    for (;x > 0;) {
-        let left = x / div;
-        let right = x % 10;
-        if (left != right) {
-            return false;
-        }
-        x = (x % div) / 10;
-        div /= 100;
-    }
-    return true;
-}
-isPalindrome(121)`
+	buf := `let nums = [2, 7, 11, 15];
+let target = 9;
+let dict = {};
+for (let i = 0; i < len(nums); i = i + 1) {
+   if (dict[nums[i]] == null) {
+       dict[target - nums[i]] = i;
+   } else {
+       printf("Answer found: [%s] [%s]", i, dict[nums[i]]);
+   }
+}`
 	quickParser(buf)
 }
