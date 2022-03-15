@@ -15,7 +15,9 @@ func NewEnclosedEnv(outer *Env) *Env {
 }
 
 func NewEnv() *Env {
-	return &Env{store: make(map[string]Object), outer: nil}
+	e := &Env{store: make(map[string]Object), outer: nil}
+	e.Set("null", &Null{})
+	return e
 }
 
 type Env struct {

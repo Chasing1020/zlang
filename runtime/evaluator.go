@@ -68,6 +68,8 @@ func evalPrefixExpression(operator string, right object.Object) object.Object {
 
 func evalInfixExpression(operator string, left, right object.Object) object.Object {
 	switch {
+	case left.Type() == object.NULL && right.Type() == object.NULL:
+		return toBooleanObject(true)
 	case left.Type() == object.INTEGER && right.Type() == object.INTEGER:
 		return evalIntegerInfixExpression(operator, left, right)
 	case left.Type() == object.STRING && right.Type() == object.STRING:

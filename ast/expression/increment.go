@@ -12,15 +12,15 @@ import (
 	"zlang/token"
 )
 
-// increment implement the Expr and Assignable interface.
+// Increment implement the Expr and Assignable interface.
+// TODO: support incr
 type Increment struct {
 	Token token.Token // The [ token
 	Left  ast.Expr
-	Index ast.Expr
 }
 
 func (i *Increment) IsExpr()         {}
 func (i *Increment) Literal() string { return i.Token.Literal }
 func (i *Increment) String() string {
-	return fmt.Sprintf("(%s++))", i.Left.String(), i.Index.String())
+	return fmt.Sprintf("(%s++))", i.Left.String())
 }

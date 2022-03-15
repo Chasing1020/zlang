@@ -61,7 +61,6 @@ func TestAssignment(t *testing.T) {
 	}
 }
 
-
 func TestArray(t *testing.T) {
 	inputs := []string{
 		//`let nums = [1, 2,true, "zjc", function(a,b){return a + b;}];
@@ -71,13 +70,30 @@ func TestArray(t *testing.T) {
 		//`let a={"name":"zjc"};
 		//a["name"] = "chasing";
 		//a["name"]`,
-		`let a = eval(1+1*2);
-		println(a)
-		println(string(a))`,
+		//`let a = eval(1+1*2);
+		//println(a)
+		//println(string(a))`,
+		`// This is a comment that
+		let a = 10;
+		println(a);`,
 	}
 	for _, input := range inputs {
 		quickEval(input)
 	}
+}
+
+func TestTwoSum(t *testing.T) {
+	buf := `let nums = [2, 7, 11, 15];
+let target = 9;
+let dict = {};
+for (let i = 0; i < len(nums); i = i + 1) {
+   if (dict[nums[i]] == null) {
+       dict[target - nums[i]] = i;
+   } else {
+       printf("Answer found: [%s] [%s]", i, dict[nums[i]]);
+   }
+}`
+	quickEval(buf)
 }
 
 func quickEval(buf string) {
@@ -88,4 +104,3 @@ func quickEval(buf string) {
 	eval := Eval(file, env)
 	log.Println(eval)
 }
-

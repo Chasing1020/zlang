@@ -235,3 +235,9 @@ func (p *Parser) parseAssignmentExpression(left ast.Expr) ast.Expr {
 	}
 	return stmt
 }
+
+// parseAssignmentExpression
+// Statement -> Assignable = Expression
+func (p *Parser) parseComment() ast.Expr {
+	return &expression.String{Token: token.Token{Type: token.Comment, Literal: "//"}, Value: ""}
+}
