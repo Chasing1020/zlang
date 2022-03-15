@@ -9,6 +9,7 @@ package scanner
 import (
 	"errors"
 	"fmt"
+	"io"
 	"unicode/utf8"
 )
 
@@ -51,20 +52,10 @@ func (s *source) errorf(format string, args ...interface{}) {
 	s.error(fmt.Sprintf(format, args...))
 }
 
-//func (s *source) nextCh() {
-//
-//
-//	if s.index+1 > len(s.buf) {
-//		s.ch = 0
-//		s.err = io.EOF
-//	} else {
-//		s.ch = s.buf[s.index]
-//	}
-//	s.index++
-//}
 
 func (s *source) nextCh() {
 	if s.next >= len(s.buf) {
+		s.err = io.EOF
 		s.ch = 0
 	} else {
 		s.ch = s.buf[s.next]
@@ -80,13 +71,3 @@ func (s *source) nextCh() {
 	s.next++
 }
 
-//func error (line, col uint, msg string) {
-//	if msg[0] != '/' {
-//		// error
-//		if msg != "comment not terminated" {
-//			t.Errorf("%q: %s", test.src, msg)
-//		}
-//		return
-//	}
-//	got = comment{line - linebase, col - colbase, msg} // keep last one
-//}

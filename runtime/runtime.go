@@ -128,11 +128,14 @@ func Eval(node ast.Node, env *object.Env) object.Object {
 		if isError(right) {
 			return right
 		}
-		_, ok := env.Get(n.Left.String())
-		if !ok {
-			return &object.Error{Message: "use of undeclared identifier:" + n.Left.String()}
+		switch left := n.Left.(type) {
+		case *expression.Index:
+			env.SetIndex(left.Left.String(), Eval(left.Index, env), right)
+		case *expression.Identifier:
+			env.Set(n.Left.String(), right)
 		}
-		env.Set(n.Left.String(), right)
+		return right
+
 	}
 	return nil
 }

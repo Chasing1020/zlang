@@ -133,8 +133,7 @@ func evalIntegerInfixExpression(operator string, left, right object.Object) obje
 	case "!=":
 		return toBooleanObject(leftVal != rightVal)
 	default:
-		return newError("unknown operator: %s %d",
-			operator, right.Type())
+		return newError("unknown operator: %s %d",operator, right.Type())
 	}
 }
 

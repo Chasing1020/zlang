@@ -19,7 +19,7 @@ var runCmd = &cobra.Command{
 	Short: "Compile and run a source file",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
-			fmt.Println("zlang run error: no go files listed")
+			fmt.Println("zlang run error: no zjc files listed")
 			return
 		}
 		buf, err := os.ReadFile("./" + args[0])
