@@ -68,9 +68,12 @@ func TestArray(t *testing.T) {
 		//nums[0]+nums[1];
 		//nums[3](1,2);
 		//`,
-		`let a={"name":"zjc"};
-		a["name"] = "chasing";
-		a["name"]`,
+		//`let a={"name":"zjc"};
+		//a["name"] = "chasing";
+		//a["name"]`,
+		`let a = eval(1+1*2);
+		println(a)
+		println(string(a))`,
 	}
 	for _, input := range inputs {
 		quickEval(input)
