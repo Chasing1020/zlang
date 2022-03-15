@@ -33,5 +33,6 @@ func (f *Function) String() string {
 	for _, p := range f.Parameters {
 		params = append(params, p.String())
 	}
+	// TODO: better format
 	return fmt.Sprintf("function(%s) %s", strings.Join(params, ", "), f.Body.String())
 }

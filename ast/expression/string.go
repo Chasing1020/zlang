@@ -16,4 +16,9 @@ type String struct {
 
 func (s *String) IsExpr()         {}
 func (s *String) Literal() string { return s.Token.Literal }
-func (s *String) String() string  { return s.Token.Literal }
+func (s *String) String() string {
+	if s.Token.Type == token.Comment {
+		return ""
+	}
+	return s.Token.Literal
+}

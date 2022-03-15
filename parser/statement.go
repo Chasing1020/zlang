@@ -158,7 +158,11 @@ func (p *Parser) parseForStatement() *statement.For {
 	f := &statement.For{Token: p.curTok}
 	p.nextToken()
 	p.nextToken()
-	f.InitStat = p.parseLetStatement()
+	if p.curTok.Type == token.Semi {
+		f.InitStat = nil
+	} else {
+		f.InitStat = p.parseLetStatement()
+	}
 	//p.nextToken()
 	if p.curTokenIs(token.Semi) {
 		p.nextToken()
@@ -168,8 +172,11 @@ func (p *Parser) parseForStatement() *statement.For {
 	if p.curTokenIs(token.Semi) {
 		p.nextToken()
 	}
-	f.UpdateStat = p.parseStatement()
-	p.nextToken()
+	if p.curTok.Type == token.Rparen {
+		f.UpdateStat = nil
+	} else {
+		f.UpdateStat = p.parseStatement()
+	}
 	p.nextToken()
 	f.Body = p.parseBlockStatement()
 	return f

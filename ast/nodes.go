@@ -49,7 +49,7 @@ type Stat interface {
 // File implements the Node interface.
 type File struct {
 	Stats []Stat
-	EOF Pos
+	EOF   Pos
 }
 
 func (f *File) Literal() string {

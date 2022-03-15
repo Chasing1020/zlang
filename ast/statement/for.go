@@ -24,7 +24,24 @@ type For struct {
 func (f *For) IsStat()         {}
 func (f *For) Literal() string { return f.Token.Literal }
 func (f *For) String() (s string) {
-	s = fmt.Sprintf("for (%s; %s; %s) ", f.InitStat.String(), f.Condition.String(), f.UpdateStat)
+	var initStat, condition, updateStat string
+	if f.InitStat == nil {
+		initStat = ""
+	} else {
+		initStat = f.InitStat.String()
+	}
+	if f.Condition == nil {
+		condition = ""
+	} else {
+		condition = f.Condition.String()
+	}
+	if f.UpdateStat == nil {
+		updateStat = ""
+	} else {
+		updateStat = f.Condition.String()
+	}
+
+	s = fmt.Sprintf("for (%s; %s; %s) ", initStat, condition, updateStat)
 	if f.Body != nil {
 		s += fmt.Sprintf("%s", f.Body.String())
 	}

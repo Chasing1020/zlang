@@ -42,9 +42,8 @@ func TestString(t *testing.T) {
 	}
 }
 
-
 func TestBoolean(t *testing.T) {
-	inputs := []string {
+	inputs := []string{
 		"true",
 		"falae",
 		"2 > 1",
@@ -85,4 +84,29 @@ func TestArray(t *testing.T) {
 	for _, input := range inputs {
 		quickParser(input)
 	}
+}
+
+func TestPalindrome(t *testing.T) {
+	buf := `let isPalindrome = function (x) {
+    if (x < 0) {
+        return false;
+    }
+    let div = 1;
+    for (; x / div >= 10;) {
+        div = div * 10;
+    }
+    for (;x > 0;) {
+        let left = x / div;
+        let right = x % 10;
+        if (left != right) {
+            return false;
+        }
+        x = (x % div) / 10;
+        div = div / 100;
+    }
+    return true;
+}
+
+print(isPalindrome(12321));`
+	quickParser(buf)
 }

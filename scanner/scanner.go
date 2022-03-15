@@ -76,13 +76,13 @@ func (s *Scanner) NextTok() {
 		if s.peekChar() == '=' {
 			ch := s.ch
 			s.nextCh()
-			s.Token = token.Token{Type: token.Neq, Literal: string(ch)}
+			s.Token = token.Token{Type: token.Neq, Literal: string(ch)+string(s.ch)}
 		} else {
 			s.Token = token.Token{Type: token.Bang, Literal: string(s.ch)}
 		}
 	case '/':
 		if s.peekChar() == '/' {
-			for s.ch != '\n' && s.err == nil{
+			for s.ch != '\n' && s.err == nil {
 				s.nextCh()
 			}
 			s.Token = token.Token{Type: token.Comment, Literal: "//"}
@@ -133,17 +133,16 @@ func (s *Scanner) NextTok() {
 		s.Token = token.Token{Type: token.EOF, Literal: string(s.ch)}
 	default:
 		// if current ch can be an identifier
-		if isLetter(s.ch) && s.readIdentChar(true) {
+		// TODO: fix identifier start with '_'
+		if (s.ch == '_' || isLetter(s.ch)) && s.readIdentChar(true) {
 			literal := s.ident()
 			s.Token = token.Token{Type: checkIdent(literal), Literal: literal}
-			return
 		} else if isDigit(s.ch) {
 			s.Token = token.Token{Type: token.Int, Literal: s.readNumber()}
-			return
 		} else {
 			s.errorf("invalid character %#U in identifier", s.ch)
-			return
 		}
+		return
 	}
 
 	s.nextCh()
@@ -152,7 +151,6 @@ func (s *Scanner) NextTok() {
 
 func (s *Scanner) peekChar() byte {
 	if s.index+1 >= len(s.buf) {
-		s.err = io.EOF
 		return 0
 	} else {
 		return s.buf[s.index+1]

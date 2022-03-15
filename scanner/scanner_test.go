@@ -50,13 +50,16 @@ func TestForLoop(t *testing.T) {
 	quickScan(input)
 }
 
-func TestCompare(t *testing.T) {
+func TestQuickScanner(t *testing.T) {
 	inputs := []string{
 		//`12345`,
 		`// This is a comment`,
 		//`<=`,
 		//`>`,
 		//`<=`,
+		//`for(;i<5;){i=i+1}`,
+		`1!=2`,
+		`1<=2`,
 	}
 	for _, input := range inputs {
 		quickScan(input)
@@ -72,5 +75,6 @@ func quickScan(input string) {
 	for s.NextTok(); s.err != io.EOF; s.NextTok() {
 		fmt.Println("token:", token.Map[s.Type], ", literal:", s.Literal)
 	}
+	fmt.Println("token:", token.Map[s.Type], ", literal:", s.Literal)
 	fmt.Println("-----------------")
 }

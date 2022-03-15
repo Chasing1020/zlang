@@ -6,6 +6,9 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"zlang/parser"
+	"zlang/runtime"
 
 	"github.com/spf13/cobra"
 )
@@ -21,7 +24,22 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("fmt called")
+		if len(args) == 0 {
+			fmt.Println("zlang run error: no zjc files listed")
+			return
+		}
+		buf, err := os.ReadFile("./" + args[0])
+		if err != nil {
+			panic(err)
+		}
+		err = runtime.Run(string(buf))
+		if err != nil {
+			panic(err)
+		}
+		p := parser.Parser{}
+		p.Init(string(buf))
+		file := p.ParseFile()
+		fmt.Println(file.Stats)
 	},
 }
 
