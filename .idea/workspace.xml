@@ -4,13 +4,20 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="706e3cce-31f6-4975-b53d-f827cccd3e36" name="Changes" comment="" />
+    <list default="true" id="706e3cce-31f6-4975-b53d-f827cccd3e36" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/LICENCE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.zjc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/zlang" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/zlang.exe" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="GOROOT" url="file:///usr/lib/go" />
+  <component name="GOROOT" url="file:///opt/homebrew/Cellar/go/1.19.5/libexec" />
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -40,7 +47,7 @@
     "WebServerToolWindowFactoryState": "false",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "/home/zjc/Projects/go/zlang",
+    "last_opened_file_path": "/Users/zjc/Projects/go/zlang",
     "nodejs_package_manager_path": "npm"
   }
 }]]></component>
@@ -63,6 +70,12 @@
                       </list>
                     </value>
                   </entry>
+                </map>
+              </option>
+              <option name="COLUMN_ID_WIDTH">
+                <map>
+                  <entry key="Table.Default.Author.ColumnIdWidth" value="90" />
+                  <entry key="Table.Space.CommitStatus.ColumnIdWidth" value="37" />
                 </map>
               </option>
             </State>
